@@ -94,16 +94,22 @@ export default function SimpleInicisPayment({
 
       console.log('💳 결제 데이터 생성 완료:', result.data);
 
-      // 직접 결제 페이지로 이동하는 방식 사용
+      // KG이니시스 표준 결제 방식 사용
       const form = document.createElement('form');
       form.method = 'POST';
       form.style.display = 'none';
 
-      // 테스트 모드에 따라 결제 URL 결정
+      // 테스트/운영 모드에 따라 결제 URL 결정
       const isTestMode = result.data.paymentData.mid === 'INIpayTest';
-      form.action = isTestMode
-        ? 'https://stgsmartpay.inicis.com/smart/payment/'
-        : 'https://mobile.inicis.com/smart/payment/';
+
+      // 이니시스 표준 모바일 결제 URL
+      if (isTestMode) {
+        // 테스트 환경: stdpay 도메인 사용
+        form.action = 'https://stgstdpay.inicis.com/inicis/std/mpi_proc.jsp';
+      } else {
+        // 운영 환경: stdpay 도메인 사용
+        form.action = 'https://stdpay.inicis.com/inicis/std/mpi_proc.jsp';
+      }
 
       // 모든 파라미터 추가
       Object.keys(result.data.paymentData).forEach(key => {

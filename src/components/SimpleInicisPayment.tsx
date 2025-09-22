@@ -89,7 +89,7 @@ export default function SimpleInicisPayment({
       // 테스트 모드에 따라 결제 URL 결정
       const isTestMode = result.data.paymentData.mid === 'INIpayTest';
       form.action = isTestMode
-        ? 'https://mobile.inicis.com/smart/payment/'
+        ? 'https://stgsmartpay.inicis.com/smart/payment/'
         : 'https://mobile.inicis.com/smart/payment/';
 
       // 모든 파라미터 추가

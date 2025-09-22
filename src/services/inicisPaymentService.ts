@@ -113,35 +113,26 @@ class InicisPaymentService {
     const signature = this.generateSignature(request.oid, request.price, timestamp);
     const verification = this.generateVerification(request.price);
 
-    // 이니시스 공식 가이드 표준결제 파라미터 구성
+    // 모바일 결제용 간소화된 파라미터 구성
     const paymentData: any = {
-      // 이니시스 공식 가이드 필수 파라미터
-      version: '1.0',                         // 버전 (고정값)
+      // 필수 파라미터만 포함
       mid: this.MID,                         // 상점아이디
       oid: request.oid,                      // 주문번호
       price: request.price.toString(),       // 결제금액
-      timestamp,                             // 타임스탬프
-      signature,                             // 전자서명
-      verification,                          // 검증데이터
-      mKey: crypto.createHash('sha256').update(this.SIGNKEY, 'utf8').digest('hex'), // 암호화키
-      currency: 'WON',                       // 통화코드
-
-      // 상품/구매자 정보
       goodname: request.goodname,            // 상품명
       buyername: request.buyername,          // 구매자명
       buyertel: request.buyertel,            // 구매자연락처
       buyeremail: request.buyeremail || '',  // 구매자이메일
 
-      // 결제 방법 설정 (공식 가이드 기준)
-      gopaymethod: request.gopaymethod || 'Card:DirectBank:VBank', // 결제방법
+      // 결제 방법 (카드만)
+      gopaymethod: 'Card',                   // 카드결제만
 
-      // URL 설정 (공식 가이드 기준)
+      // URL 설정
       returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/return`,   // 결과수신URL
       closeUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/close`,     // 결제창닫기URL
 
-      // 결제 옵션 (공식 가이드 기준)
-      acceptmethod: 'HPP(1):below1000:va_receipt', // 결제옵션
-      languageView: 'ko',                    // 언어설정
+      // 기본 설정
+      currency: 'WON',                       // 통화코드
       charset: 'UTF-8'                       // 인코딩
     };
 

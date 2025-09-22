@@ -186,24 +186,10 @@ export async function POST(request: NextRequest) {
         });
       }
     } else {
-      // authToken이 없을 때 - 테스트 환경 에러 처리
-      if (paymentResult.resultCode === 'V018' ||
-          paymentResult.resultCode === 'V021' ||
-          paymentResult.resultCode === 'V016' ||
-          paymentResult.resultCode === 'V001') {
-        console.log('⚠️ 테스트 환경: 결제 설정 오류를 성공으로 처리');
+      // authToken이 없을 때 - 결제 결과 검증
+      const isValid = inicisPaymentService.verifyPaymentResult(paymentResult);
 
-        // 테스트용 더미 데이터 설정
-        paymentResult.tid = `TEST_${Date.now()}`;
-        paymentResult.price = 9900;
-        paymentResult.resultCode = '0000';  // 성공 코드로 변경
-
-        console.log('✅ 테스트 결제 성공 처리');
-      } else {
-        // 다른 오류 코드는 기존 검증 로직
-        const isValid = inicisPaymentService.verifyPaymentResult(paymentResult);
-
-        if (!isValid) {
+      if (!isValid) {
           console.error('❌ 결제 결과 검증 실패');
 
           // 결제 실패 메트릭스 기록 (oid가 있을 때만)

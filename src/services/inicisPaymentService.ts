@@ -69,18 +69,17 @@ class InicisPaymentService {
   }
 
   /**
-   * 결제 요청용 signature 생성 (가이드에 따른 방식)
+   * 결제 요청용 signature 생성 (이니시스 공식 가이드 방식)
    */
   generateSignature(oid: string, price: number, timestamp: string): string {
-    // 이니시스 표준: oid + price + timestamp + signKey
-    const hashData = `${oid}${price}${timestamp}${this.SIGNKEY}`;
+    // 이니시스 공식: oid=값&price=값&timestamp=값
+    const hashData = `oid=${oid}&price=${price}&timestamp=${timestamp}`;
 
     console.log('🔐 Signature 생성 데이터:', {
       oid,
       price,
       timestamp,
-      signKey: this.SIGNKEY.substring(0, 10) + '...',
-      hashData: hashData.substring(0, 50) + '...'
+      hashData
     });
 
     const signature = crypto
@@ -94,10 +93,15 @@ class InicisPaymentService {
   }
 
   /**
-   * verification 값 생성
+   * verification 값 생성 (이니시스 공식 가이드 방식)
    */
-  generateVerification(price: number): string {
-    const hashData = `${this.MID}${price}${this.SIGNKEY}`;
+  generateVerification(oid: string, price: number, signKey: string, timestamp: string): string {
+    // 이니시스 공식: oid=값&price=값&signKey=값&timestamp=값
+    const hashData = `oid=${oid}&price=${price}&signKey=${signKey}&timestamp=${timestamp}`;
+
+    console.log('🔐 Verification 생성 데이터:', {
+      hashData: hashData.substring(0, 50) + '...'
+    });
 
     return crypto
       .createHash('sha256')
@@ -106,53 +110,70 @@ class InicisPaymentService {
   }
 
   /**
+   * mKey 생성 (SHA256 해시값)
+   */
+  generateMKey(): string {
+    return crypto
+      .createHash('sha256')
+      .update(this.SIGNKEY, 'utf8')
+      .digest('hex');
+  }
+
+  /**
    * 결제 요청 데이터 생성 (이니시스 공식 가이드 기반)
    */
   createPaymentData(request: InicisPaymentRequest, isMobile: boolean = false) {
     const timestamp = Date.now().toString();
-    const signature = this.generateSignature(request.oid, request.price, timestamp);
-    const verification = this.generateVerification(request.price);
+    const mKey = this.generateMKey();
+    const verification = this.generateVerification(request.oid, request.price, this.SIGNKEY, timestamp);
 
-    // 모바일 결제용 간소화된 파라미터 구성
+    // 이니시스 공식 가이드 기준 필수 파라미터 구성
     const paymentData: any = {
-      // 필수 파라미터만 포함
+      // 필수 파라미터 (공식 샘플 기준)
+      version: '1.0',                        // 버전
       mid: this.MID,                         // 상점아이디
       oid: request.oid,                      // 주문번호
       price: request.price.toString(),       // 결제금액
+      timestamp: timestamp,                  // 타임스탬프 (필수!)
+      signature: this.generateSignature(request.oid, request.price, timestamp), // 서명값
+      verification: verification,            // 검증값
+      mKey: mKey,                           // 상점키 해시값
+
+      // 상품 및 구매자 정보
       goodname: request.goodname,            // 상품명
       buyername: request.buyername,          // 구매자명
       buyertel: request.buyertel,            // 구매자연락처
       buyeremail: request.buyeremail || '',  // 구매자이메일
 
-      // 결제 방법 (카드만)
-      gopaymethod: 'Card',                   // 카드결제만
+      // 결제 방법 설정
+      gopaymethod: request.gopaymethod || 'Card', // 결제방법 (Card, DirectBank, VBank 등)
 
-      // URL 설정
+      // URL 설정 (공식 가이드 기준)
       returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/return`,   // 결과수신URL
       closeUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/close`,     // 결제창닫기URL
+      acceptmethod: 'below1000:card',        // 결제 수단 제한
 
       // 기본 설정
       currency: 'WON',                       // 통화코드
       charset: 'UTF-8'                       // 인코딩
     };
 
-    // 모바일 결제시 추가 파라미터 (공식 가이드 기준)
+    // 모바일 결제시 추가 파라미터
     if (isMobile) {
-      // 모바일 앱 스킴 설정 (앱 복귀용)
-      paymentData.P_RESERVED = 'iosapp=Y&app_scheme=facewisdom://';
-      paymentData.P_NOTI = `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/noti`; // 모바일 노티URL
-
-      // 모바일 전용 파라미터
-      paymentData.device = 'mobile';
+      paymentData.P_RESERVED = 'below1000=Y'; // 모바일 1000원 이하 간편결제
+      paymentData.P_NOTI = `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/noti`; // 노티URL
     }
 
     console.log('💳 결제 데이터 생성됨 (공식 가이드 기준):', {
       oid: paymentData.oid,
       price: paymentData.price,
-      buyername: paymentData.buyername,
       timestamp: paymentData.timestamp,
+      buyername: paymentData.buyername,
       isMobile: isMobile,
-      mode: this.IS_TEST ? 'TEST' : 'PRODUCTION'
+      mode: this.IS_TEST ? 'TEST' : 'PRODUCTION',
+      hasSignature: !!paymentData.signature,
+      hasVerification: !!paymentData.verification,
+      hasMKey: !!paymentData.mKey
     });
 
     return paymentData;

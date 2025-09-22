@@ -35,7 +35,6 @@ export default function SimpleInicisPayment({
 
   const handlePayment = async () => {
     console.log('🔷 결제 시작');
-    alert('결제 시작 - 디버그 모드'); // 디버그용
     setIsLoading(true);
     setError(null);
 
@@ -70,7 +69,7 @@ export default function SimpleInicisPayment({
           buyerPhone: '01000000000',
           buyerEmail: 'anonymous@facewisdom-ai.xyz',
           sessionId: `session_${Date.now()}`,
-          isMobile: false
+          isMobile: true
         }),
       });
 
@@ -81,69 +80,17 @@ export default function SimpleInicisPayment({
       }
 
       console.log('💳 결제 데이터 생성 완료:', result.data);
-      alert(`API 응답 성공: MID=${result.data.paymentData.mid}`);
 
-      // 2. INIStdPay.js 로드
-      const isTestMode = result.data.paymentData.mid === 'INIpayTest';
-      const scriptUrl = isTestMode
-        ? 'https://stgstdpay.inicis.com/stdjs/INIStdPay.js'
-        : 'https://stdpay.inicis.com/stdjs/INIStdPay.js';
-
-      console.log('📜 스크립트 로딩:', scriptUrl, '| 테스트 모드:', isTestMode);
-
-      // 기존 INIStdPay 객체와 스크립트 정리
-      if (window.INIStdPay) {
-        console.log('🧹 기존 INIStdPay 객체 정리');
-        delete window.INIStdPay;
-      }
-
-      // 기존 스크립트들 모두 제거
-      const existingScripts = document.querySelectorAll('script[src*="INIStdPay.js"]');
-      existingScripts.forEach(script => script.remove());
-
-      // 스크립트 로드 (더 안전한 방법)
-      await new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = scriptUrl;
-        script.type = 'text/javascript';
-        script.charset = 'utf-8';
-
-        script.onload = () => {
-          console.log('✅ INIStdPay.js 로드 성공');
-          alert('스크립트 로드 성공');
-          // 스크립트 로드 후 잠시 대기
-          setTimeout(() => {
-            if (window.INIStdPay && typeof window.INIStdPay.pay === 'function') {
-              console.log('✅ INIStdPay 객체 확인됨');
-              alert('INIStdPay 객체 확인됨');
-              resolve(true);
-            } else {
-              console.error('❌ INIStdPay 객체를 찾을 수 없음');
-              alert('INIStdPay 객체 없음');
-              reject(new Error('INIStdPay 객체 초기화 실패'));
-            }
-          }, 500);
-        };
-
-        script.onerror = (error) => {
-          console.error('❌ INIStdPay.js 로드 실패:', error);
-          reject(new Error('결제 스크립트 로드 실패'));
-        };
-
-        document.head.appendChild(script);
-      });
-
-      // 3. 결제 폼 생성
-      const formId = 'inicis-payment-form-' + Date.now();
-      const existingForm = document.getElementById(formId);
-      if (existingForm) {
-        existingForm.remove();
-      }
-
+      // 직접 결제 페이지로 이동하는 방식 사용
       const form = document.createElement('form');
-      form.id = formId;
       form.method = 'POST';
       form.style.display = 'none';
+
+      // 테스트 모드에 따라 결제 URL 결정
+      const isTestMode = result.data.paymentData.mid === 'INIpayTest';
+      form.action = isTestMode
+        ? 'https://mobile.inicis.com/smart/payment/'
+        : 'https://mobile.inicis.com/smart/payment/';
 
       // 모든 파라미터 추가
       Object.keys(result.data.paymentData).forEach(key => {
@@ -160,54 +107,8 @@ export default function SimpleInicisPayment({
 
       document.body.appendChild(form);
 
-      // 4. 결제창 호출
-      console.log('🚀 INIStdPay.pay() 호출 준비');
-      console.log('📋 INIStdPay 객체 상태:', {
-        exists: !!window.INIStdPay,
-        hasPayMethod: !!(window.INIStdPay && window.INIStdPay.pay),
-        type: typeof window.INIStdPay?.pay
-      });
-
-      if (window.INIStdPay && typeof window.INIStdPay.pay === 'function') {
-        try {
-          console.log('🎯 INIStdPay.pay 실행...');
-          console.log('📝 폼 요소:', form);
-          console.log('📝 폼 파라미터 수:', form.children.length);
-
-          // 직접 호출 (팝업 차단 방지를 위해 setTimeout 제거)
-          alert('INIStdPay.pay() 호출 시작');
-          window.INIStdPay.pay(form);
-
-          console.log('✅ 결제창 호출 명령 완료');
-          console.log('⏳ 결제창이 열렸는지 확인해주세요');
-          alert('INIStdPay.pay() 호출 완료');
-
-          // 10초 후 로딩 상태 해제 (타임아웃 방지)
-          setTimeout(() => {
-            if (isLoading) {
-              console.log('⚠️ 10초 경과 - 로딩 상태 해제');
-              setIsLoading(false);
-              setError('결제창이 열리지 않았다면 팝업 차단을 해제하고 다시 시도해주세요.');
-            }
-          }, 10000);
-
-        } catch (popupError) {
-          console.error('❌ 팝업 호출 오류:', popupError);
-          setError('결제창을 열 수 없습니다. 팝업 차단을 해제하고 다시 시도해주세요.');
-          setIsLoading(false);
-        }
-      } else {
-        console.error('❌ INIStdPay 객체 또는 pay 함수를 찾을 수 없음');
-        throw new Error('INIStdPay 객체를 찾을 수 없습니다');
-      }
-
-      // 폼 정리
-      setTimeout(() => {
-        const formElement = document.getElementById(formId);
-        if (formElement && formElement.parentNode) {
-          formElement.parentNode.removeChild(formElement);
-        }
-      }, 5000);
+      console.log('🚀 결제 페이지로 직접 이동');
+      form.submit();
 
     } catch (error: any) {
       console.error('❌ 결제 오류:', error);
@@ -252,9 +153,9 @@ export default function SimpleInicisPayment({
           <div className="flex-1">
             <h4 className="text-sm font-semibold text-blue-800 mb-1">KG이니시스 안전결제</h4>
             <div className="text-sm text-blue-700 space-y-1">
-              <p>• 새 창에서 카드 정보를 안전하게 입력하게 됩니다</p>
+              <p>• 이니시스 결제 페이지로 이동하여 카드 정보를 입력합니다</p>
               <p>• 신용카드, 체크카드, 계좌이체 결제 가능</p>
-              <p>• 팝업 차단이 설정된 경우 결제창이 열리지 않을 수 있습니다</p>
+              <p>• 결제 완료 후 자동으로 분석 페이지로 돌아옵니다</p>
             </div>
           </div>
         </div>
@@ -288,12 +189,12 @@ export default function SimpleInicisPayment({
             </svg>
           </div>
           <div className="flex-1">
-            <h4 className="text-sm font-semibold text-yellow-800 mb-1">팝업 차단 해제 필요</h4>
+            <h4 className="text-sm font-semibold text-yellow-800 mb-1">결제 프로세스 안내</h4>
             <div className="text-sm text-yellow-700">
-              <p className="font-medium text-red-600">중요: 결제창이 팝업으로 열립니다</p>
-              <p>• 브라우저 주소창 옆 팝업 차단 아이콘을 클릭하여 허용</p>
-              <p>• Chrome: 설정 → 개인정보 및 보안 → 사이트 설정 → 팝업</p>
-              <p>• 결제 버튼 클릭 후 새 창이 열리지 않으면 팝업이 차단된 것입니다</p>
+              <p className="font-medium text-blue-600">결제 페이지로 이동합니다</p>
+              <p>• 결제 버튼 클릭 시 이니시스 결제 페이지로 이동</p>
+              <p>• 카드 정보를 입력하여 결제 진행</p>
+              <p>• 결제 완료 후 자동으로 분석 페이지로 돌아옵니다</p>
             </div>
           </div>
         </div>
@@ -302,10 +203,10 @@ export default function SimpleInicisPayment({
       {/* 디버그 정보 */}
       <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
         <div className="text-xs text-gray-600">
-          <p className="font-semibold">디버그 정보:</p>
-          <p>• 테스트 모드: 활성 (INIpayTest)</p>
-          <p>• 결제 버튼 클릭 후 브라우저 개발자 도구 콘솔을 확인하세요 (F12)</p>
-          <p>• 문제 발생시 콘솔 로그를 캡처하여 개발팀에 전달해주세요</p>
+          <p className="font-semibold">결제 방식:</p>
+          <p>• 테스트 모드: 활성 (실제 결제 없음)</p>
+          <p>• 결제 페이지 직접 이동 방식 사용</p>
+          <p>• 테스트용 카드로 결제 프로세스 체험 가능</p>
         </div>
       </div>
 

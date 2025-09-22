@@ -1,0 +1,323 @@
+import { DEFAULT_IMAGE_OPTIONS } from '../types/image';
+import { imageService } from '../services/imageService';
+export class ImageController {
+    async uploadImage(req, res) {
+        try {
+            res.status(501).json({
+                success: false,
+                error: '파일 업로드 기능은 현재 비활성화되어 있습니다. 복사/붙여넣기 기능을 사용해주세요.'
+            });
+            return;
+        }
+        catch (error) {
+            console.error('이미지 업로드 오류:', error);
+            res.status(500).json({
+                success: false,
+                error: '서버 내부 오류가 발생했습니다'
+            });
+        }
+    }
+    async pasteImage(req, res) {
+        try {
+            if (!req.imageValidation || !req.imageValidation.isValid) {
+                res.status(400).json({
+                    success: false,
+                    error: '이미지 검증 실패',
+                    validationErrors: req.imageValidation?.errors || ['검증되지 않은 이미지'],
+                    warnings: req.imageValidation?.warnings || []
+                });
+                return;
+            }
+            const { buffer, mimeType, originalName } = req.imageValidation;
+            if (!buffer || !mimeType) {
+                res.status(400).json({
+                    success: false,
+                    error: '이미지 데이터가 누락되었습니다'
+                });
+                return;
+            }
+            const options = {
+                ...DEFAULT_IMAGE_OPTIONS,
+                ...req.body.options
+            };
+            const result = await imageService.processImage(buffer, mimeType, originalName || 'pasted-image', options);
+            if (!result.success) {
+                res.status(500).json({
+                    success: false,
+                    error: result.error || '이미지 처리 실패'
+                });
+                return;
+            }
+            const tempStorage = await imageService.saveToTempStorage(result.processedImage, result.thumbnail);
+            const response = {
+                success: true,
+                data: {
+                    imageId: tempStorage.id,
+                    url: `/api/images/temp/${tempStorage.id}`,
+                    thumbnailUrl: result.thumbnail ? `/api/images/temp/${tempStorage.id}/thumbnail` : undefined,
+                    metadata: {
+                        width: result.processedImage.width,
+                        height: result.processedImage.height,
+                        format: result.processedImage.mimeType.split('/')[1],
+                        size: result.processedImage.size,
+                        hasTransparency: result.processedImage.mimeType === 'image/png',
+                        colorSpace: 'srgb'
+                    }
+                }
+            };
+            res.json(response);
+        }
+        catch (error) {
+            console.error('이미지 붙여넣기 오류:', error);
+            res.status(500).json({
+                success: false,
+                error: '서버 내부 오류가 발생했습니다'
+            });
+        }
+    }
+    async getTempImage(req, res) {
+        try {
+            const { tempId } = req.params;
+            const imageData = await imageService.getTempImage(tempId);
+            if (!imageData) {
+                res.status(404).json({
+                    success: false,
+                    error: '이미지를 찾을 수 없습니다'
+                });
+                return;
+            }
+            res.set({
+                'Content-Type': imageData.mimeType,
+                'Cache-Control': 'public, max-age=3600',
+                'Content-Length': imageData.buffer.length.toString()
+            });
+            res.send(imageData.buffer);
+        }
+        catch (error) {
+            console.error('임시 이미지 조회 오류:', error);
+            res.status(500).json({
+                success: false,
+                error: '서버 내부 오류가 발생했습니다'
+            });
+        }
+    }
+    async getTempThumbnail(req, res) {
+        try {
+            const { tempId } = req.params;
+            const imageData = await imageService.getTempImage(`${tempId}_thumb`);
+            if (!imageData) {
+                res.status(404).json({
+                    success: false,
+                    error: '썸네일을 찾을 수 없습니다'
+                });
+                return;
+            }
+            res.set({
+                'Content-Type': 'image/jpeg',
+                'Cache-Control': 'public, max-age=3600',
+                'Content-Length': imageData.buffer.length.toString()
+            });
+            res.send(imageData.buffer);
+        }
+        catch (error) {
+            console.error('임시 썸네일 조회 오류:', error);
+            res.status(500).json({
+                success: false,
+                error: '서버 내부 오류가 발생했습니다'
+            });
+        }
+    }
+    async saveImage(req, res) {
+        try {
+            const { tempId } = req.params;
+            const result = await imageService.permanentSave(tempId);
+            if (!result) {
+                res.status(404).json({
+                    success: false,
+                    error: '임시 이미지를 찾을 수 없습니다'
+                });
+                return;
+            }
+            res.json({
+                success: true,
+                data: {
+                    imageUrl: result.imageUrl,
+                    thumbnailUrl: result.thumbnailUrl
+                }
+            });
+        }
+        catch (error) {
+            console.error('이미지 저장 오류:', error);
+            res.status(500).json({
+                success: false,
+                error: '서버 내부 오류가 발생했습니다'
+            });
+        }
+    }
+    async deleteTempImage(req, res) {
+        try {
+            const { tempId } = req.params;
+            await imageService.deleteTempImage(tempId);
+            res.json({
+                success: true,
+                message: '임시 이미지가 삭제되었습니다'
+            });
+        }
+        catch (error) {
+            console.error('임시 이미지 삭제 오류:', error);
+            res.status(500).json({
+                success: false,
+                error: '서버 내부 오류가 발생했습니다'
+            });
+        }
+    }
+    async resizeImage(req, res) {
+        try {
+            if (!req.imageValidation || !req.imageValidation.isValid) {
+                res.status(400).json({
+                    success: false,
+                    error: '이미지 검증 실패',
+                    validationErrors: req.imageValidation?.errors || []
+                });
+                return;
+            }
+            const { buffer } = req.imageValidation;
+            const { width, height, fit = 'cover' } = req.body;
+            if (!buffer) {
+                res.status(400).json({
+                    success: false,
+                    error: '이미지 데이터가 누락되었습니다'
+                });
+                return;
+            }
+            const resizedBuffer = await imageService.resizeImage(buffer, {
+                width,
+                height,
+                fit: fit
+            });
+            res.set({
+                'Content-Type': req.imageValidation.mimeType || 'image/jpeg',
+                'Content-Length': resizedBuffer.length.toString()
+            });
+            res.send(resizedBuffer);
+        }
+        catch (error) {
+            console.error('이미지 리사이즈 오류:', error);
+            res.status(500).json({
+                success: false,
+                error: '서버 내부 오류가 발생했습니다'
+            });
+        }
+    }
+    async compressImage(req, res) {
+        try {
+            if (!req.imageValidation || !req.imageValidation.isValid) {
+                res.status(400).json({
+                    success: false,
+                    error: '이미지 검증 실패',
+                    validationErrors: req.imageValidation?.errors || []
+                });
+                return;
+            }
+            const { buffer, mimeType } = req.imageValidation;
+            const { quality = 85, format } = req.body;
+            if (!buffer) {
+                res.status(400).json({
+                    success: false,
+                    error: '이미지 데이터가 누락되었습니다'
+                });
+                return;
+            }
+            const targetFormat = format || mimeType?.split('/')[1] || 'jpeg';
+            const compressedBuffer = await imageService.compressImage(buffer, {
+                quality,
+                format: targetFormat
+            });
+            res.set({
+                'Content-Type': `image/${targetFormat}`,
+                'Content-Length': compressedBuffer.length.toString()
+            });
+            res.send(compressedBuffer);
+        }
+        catch (error) {
+            console.error('이미지 압축 오류:', error);
+            res.status(500).json({
+                success: false,
+                error: '서버 내부 오류가 발생했습니다'
+            });
+        }
+    }
+    async convertImage(req, res) {
+        try {
+            if (!req.imageValidation || !req.imageValidation.isValid) {
+                res.status(400).json({
+                    success: false,
+                    error: '이미지 검증 실패',
+                    validationErrors: req.imageValidation?.errors || []
+                });
+                return;
+            }
+            const { buffer } = req.imageValidation;
+            const { format, quality = 85 } = req.body;
+            if (!buffer) {
+                res.status(400).json({
+                    success: false,
+                    error: '이미지 데이터가 누락되었습니다'
+                });
+                return;
+            }
+            if (!['jpeg', 'png', 'webp'].includes(format)) {
+                res.status(400).json({
+                    success: false,
+                    error: '지원되지 않는 형식입니다'
+                });
+                return;
+            }
+            const convertedBuffer = await imageService.convertFormat(buffer, format, quality);
+            res.set({
+                'Content-Type': `image/${format}`,
+                'Content-Length': convertedBuffer.length.toString()
+            });
+            res.send(convertedBuffer);
+        }
+        catch (error) {
+            console.error('이미지 형식 변환 오류:', error);
+            res.status(500).json({
+                success: false,
+                error: '서버 내부 오류가 발생했습니다'
+            });
+        }
+    }
+    async getImageInfo(req, res) {
+        try {
+            if (!req.imageValidation || !req.imageValidation.isValid) {
+                res.status(400).json({
+                    success: false,
+                    error: '이미지 검증 실패',
+                    validationErrors: req.imageValidation?.errors || []
+                });
+                return;
+            }
+            const { fileInfo } = req.imageValidation;
+            res.json({
+                success: true,
+                data: {
+                    width: fileInfo?.width,
+                    height: fileInfo?.height,
+                    format: fileInfo?.format,
+                    size: fileInfo?.size,
+                    hasTransparency: fileInfo?.hasTransparency
+                }
+            });
+        }
+        catch (error) {
+            console.error('이미지 정보 조회 오류:', error);
+            res.status(500).json({
+                success: false,
+                error: '서버 내부 오류가 발생했습니다'
+            });
+        }
+    }
+}
+export const imageController = new ImageController();
+//# sourceMappingURL=imageController.js.map

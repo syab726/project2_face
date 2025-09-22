@@ -1,0 +1,23 @@
+# robots.txt for 내 얼굴 탐구생활 (facewisdom-ai.xyz)
+User-agent: *
+Allow: /
+Allow: /gwansang
+Allow: /agree
+Allow: /privacy
+Allow: /service
+
+# Block admin and API routes
+Disallow: /admin
+Disallow: /api/
+Disallow: /_next/
+Disallow: /logs/
+
+# Block temporary files and development resources
+Disallow: *.log
+Disallow: /error.md
+
+# Sitemap location
+Sitemap: https://facewisdom-ai.xyz/sitemap.xml
+
+# Crawl delay for better server performance
+Crawl-delay: 1

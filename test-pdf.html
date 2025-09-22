@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF 테스트</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div id="test-content" style="padding: 20px; background: white; width: 800px;">
+        <h1>면접 관상 분석 결과 테스트</h1>
+        <div style="margin: 20px 0;">
+            <h2>종합평가</h2>
+            <p>25세 남성의 면접 관상 분석 결과, IT/개발 직군에 적합한 특징이 여러 가지 나타납니다. 이마의 넓이는 지적 호기심과 문제 해결 능력을 나타내며, 이는 개발자로서의 자질을 보여줍니다.</p>
+        </div>
+        <div style="margin: 20px 0;">
+            <h2>첫인상 분석</h2>
+            <p>면접관은 0.3초 만에 첫인상을 형성합니다. 얼굴의 각진 턱선과 넓은 이마는 지적이고 신뢰감 있는 이미지를 줍니다.</p>
+        </div>
+    </div>
+    
+    <button onclick="testGenerateSimplePDF()">Simple PDF 테스트</button>
+    <button onclick="testGenerateHTMLToPDF()">HTML to PDF 테스트</button>
+    
+    <script>
+        // generateSimplePDF 함수 테스트
+        async function testGenerateSimplePDF() {
+            try {
+                console.log('Simple PDF 생성 시작');
+                
+                const pdfDoc = await PDFLib.PDFDocument.create();
+                const page = pdfDoc.addPage([595, 842]);
+                const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+                
+                let yPos = 750;
+                
+                // 제목
+                page.drawText('Face Analysis Report', {
+                    x: 50,
+                    y: yPos,
+                    size: 24,
+                    font: font,
+                    color: PDFLib.rgb(0.2, 0.1, 0.6)
+                });
+                yPos -= 40;
+                
+                // 날짜
+                page.drawText(`Generated: ${new Date().toLocaleDateString('en-US')}`, {
+                    x: 50,
+                    y: yPos,
+                    size: 12,
+                    font: font,
+                    color: PDFLib.rgb(0.5, 0.5, 0.5)
+                });
+                yPos -= 40;
+                
+                // 내용
+                const content = [
+                    'ANALYSIS RESULTS:',
+                    '',
+                    '1. Interview Face Analysis',
+                    '   - Comprehensive personality assessment',
+                    '   - Career guidance for IT/Development field',
+                    '   - Strengths and improvement areas',
+                    '',
+                    'This is a test PDF generation for interview analysis.'
+                ];
+                
+                for (const line of content) {
+                    if (yPos < 100) break;
+                    
+                    if (!line.trim()) {
+                        yPos -= 10;
+                        continue;
+                    }
+                    
+                    const isTitle = line.includes(':') || line.match(/^\\d+\\./); 
+                    const currentSize = isTitle ? 16 : 14;
+                    const color = isTitle ? PDFLib.rgb(0.2, 0.1, 0.6) : PDFLib.rgb(0, 0, 0);
+                    
+                    page.drawText(line, {
+                        x: 50,
+                        y: yPos,
+                        size: currentSize,
+                        font: font,
+                        color: color
+                    });
+                    
+                    yPos -= 20;
+                }
+                
+                // PDF 저장 및 다운로드
+                const pdfBytes = await pdfDoc.save();
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'test-simple.pdf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                console.log('Simple PDF 생성 완료');
+                
+            } catch (error) {
+                console.error('Simple PDF 생성 오류:', error);
+            }
+        }
+        
+        // generateHTMLToPDF 함수 테스트
+        async function testGenerateHTMLToPDF() {
+            try {
+                console.log('HTML to PDF 변환 시작');
+                
+                const element = document.getElementById('test-content');
+                if (!element) {
+                    throw new Error('테스트 요소를 찾을 수 없습니다');
+                }
+                
+                // html2canvas로 이미지 생성
+                const canvas = await html2canvas(element, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff'
+                });
+                
+                // jsPDF로 PDF 생성
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                
+                const imgWidth = 210; // A4 너비 (mm)
+                const pageHeight = 295; // A4 높이 (mm)
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                
+                let position = 0;
+                
+                // 첫 페이지
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                
+                // 추가 페이지 (필요시)
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                
+                // PDF 다운로드
+                pdf.save('test-html-to-pdf.pdf');
+                
+                console.log('HTML to PDF 변환 완료');
+                
+            } catch (error) {
+                console.error('HTML to PDF 변환 오류:', error);
+            }
+        }
+    </script>
+</body>
+</html>

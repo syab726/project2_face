@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>면접 관상 분석 결과 - 테스트</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="analysis-result-container" style="padding: 20px;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); color: white;">
+            <h2 style="text-align: center; margin-bottom: 30px; font-size: 1.8em;">면접 관상 분석 결과</h2>
+            
+            <div style="background: rgba(255,255,255,0.1); border-radius: 15px; padding: 25px; margin-bottom: 20px;">
+                
+                <!-- 종합평가 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">종합평가</h3>
+                    <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; font-size: 1.05em; line-height: 1.7;">
+                        <p>39세 남성 지원자의 얼굴은 일반사무직 면접에 적합한 관상학적 특징들이 분명히 드러납니다. 천정궁(이마)의 넓이와 부드러운 곡선은 안정적인 성격과 문제 해결 능력을 나타내며, 이는 일반사무직에서 필수적인 특성입니다. 년상궁(코)과 지각궁(턱선)의 형태는 결단력과 실행력을 보여주어 조직에서 믿을 만한 인재로 평가받을 가능성이 높습니다. 전택궁(눈)에서 나타나는 신뢰감과 수성궁(입)의 소통 능력은 면접관에게 긍정적인 인상을 줄 것입니다.</p>
+                    </div>
+                </div>
+
+                <!-- 첫인상 분석 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">첫인상 분석</h3>
+                    <div style="background: rgba(76, 175, 80, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">천정궁(이마)과 명궁(미간)에서 나타나는 관상학적 특징은 면접관의 첫 0.3초 판단에 매우 긍정적으로 작용합니다. 넓고 평평한 이마는 지적 능력과 창의성을 상징하며, 뚜렷한 미간은 집중력과 끈기를 나타냅니다. 전택궁(눈)의 안정적인 시선은 진정성을 전달하여 면접관으로 하여금 신뢰할 만한 후보자라는 인상을 갖게 합니다. 이러한 요소들이 7초 골든타임 내에 호감도를 높이는 핵심 요인으로 작용할 것입니다.</p>
+                    </div>
+                </div>
+
+                <!-- 신뢰도 평가 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">신뢰도 평가</h3>
+                    <div style="background: rgba(33, 150, 243, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">전택궁(눈), 수성궁(입), 인중궁(인중)의 관상학적 분석 결과, 높은 신뢰도를 나타내는 특징들이 발견됩니다. 눈의 크기와 위치는 감정 지능과 소통 능력이 뛰어남을 보여주며, 입술의 형태는 표현력과 설득력을 나타냅니다. 인중의 뚜렷함은 성실성과 책임감을 상징하여 조직에서 중요한 역할을 맡길 수 있는 인재임을 시사합니다. 면접에서 이러한 특성들을 강조한다면 면접관의 신뢰를 얻을 수 있을 것입니다.</p>
+                    </div>
+                </div>
+
+                <!-- 리더십 잠재력 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">리더십 잠재력</h3>
+                    <div style="background: rgba(156, 39, 176, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">년상궁(코), 지각궁(턱선), 승장궁(턱)에서 보이는 관상학적 특징들은 리더십 잠재력을 시사합니다. 코의 형태는 자신감과 추진력을 나타내며, 턱선의 발달은 의지력과 결정력을 보여줍니다. 승장궁의 실행력과 완수 능력은 팀을 이끌어 나가는 데 필요한 자질을 갖추고 있음을 의미합니다. 면접에서 구체적인 리더십 경험을 제시한다면 이러한 관상학적 특징들과 시너지를 이루어 강력한 인상을 남길 수 있습니다.</p>
+                    </div>
+                </div>
+
+                <!-- 팀워크 성향 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">팀워크 성향</h3>
+                    <div style="background: rgba(255, 152, 0, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">사공궁(관자놀이), 전곽궁(광대), 재백궁(눈썹)의 관상학적 분석을 통해 뛰어난 협업 능력을 확인할 수 있습니다. 관자놀이의 발달은 대인관계에서의 유연성을 나타내며, 광대의 형태는 사회적 친화력과 네트워킹 능력을 보여줍니다. 눈썹의 모양은 팀 내에서의 조화로운 소통과 상호 존중의 자세를 나타냅니다. 이러한 특성들은 조직 문화에 빠르게 적응하고 팀원들과 원활한 협업을 이룰 수 있는 능력을 시사합니다.</p>
+                    </div>
+                </div>
+
+                <!-- 스트레스 관리 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">스트레스 관리</h3>
+                    <div style="background: rgba(233, 30, 99, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">명궁(미간), 인중궁(인중), 지각궁(턱선)에서 나타나는 관상학적 특징들은 압박 상황에서의 대처 능력을 보여줍니다. 미간의 집중력은 스트레스 상황에서도 핵심을 놓치지 않는 능력을 의미하며, 인중의 인내심은 어려운 상황을 꾸준히 견뎌낼 수 있는 회복탄력성을 나타냅니다. 턱선의 의지력은 위기 상황에서도 결단력 있게 대처할 수 있는 능력을 보여주어 조직에서 신뢰할 수 있는 구성원임을 시사합니다.</p>
+                    </div>
+                </div>
+
+                <!-- 성장 가능성 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">성장 가능성</h3>
+                    <div style="background: rgba(0, 188, 212, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">천중궁(이마), 천정궁(이마 상부), 재백궁(눈썹)의 관상학적 분석 결과, 높은 학습 능력과 성장 잠재력이 발견됩니다. 이마의 넓이는 창의력과 문제해결력을 나타내며, 이마 상부의 발달은 장기적 비전과 목표 설정 능력을 보여줍니다. 눈썹의 형태는 전문성 습득과 기술 발전에 대한 열정을 시사하여 지속적인 자기계발을 통해 조직과 함께 성장할 수 있는 인재임을 의미합니다.</p>
+                    </div>
+                </div>
+
+                <!-- 강점 분석 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">강점 분석</h3>
+                    <div style="background: rgba(76, 175, 80, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">12궁 관상학적 분석에서 가장 뛰어난 특징은 천정궁(이마)과 전택궁(눈)의 조화로운 발달입니다. 이마의 지적 능력과 눈의 진정성이 결합되어 면접관에게 신뢰할 만한 전문가라는 인상을 줄 것입니다. 수성궁(입)의 표현력과 인중궁(인중)의 성실성이 더해져 소통 능력이 뛰어난 조직원으로 평가받을 수 있습니다. 면접에서 구체적인 사례와 함께 이러한 강점들을 어필한다면 경쟁자들과 차별화된 인상을 남길 수 있을 것입니다.</p>
+                    </div>
+                </div>
+
+                <!-- 보완점 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">보완점</h3>
+                    <div style="background: rgba(255, 152, 0, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">관상학적으로 보완이 필요한 궁위는 지각궁(턱선)과 수성궁(입)의 긴장감 완화입니다. 턱선의 경직은 스트레스가 누적되었음을 의미하므로, 면접 전 충분한 휴식과 이완 운동을 통해 자연스러운 표정을 만드는 것이 중요합니다. 수성궁의 표정 근육 훈련법으로는 매일 10분간 거울 앞에서 자연스러운 미소를 연습하고, 발음 연습을 통해 입술 주변 근육의 유연성을 높이는 것을 권합니다. 이러한 개선을 통해 면접에서 더욱 친근하고 신뢰할 만한 인상을 줄 수 있습니다.</p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <button id="pdf-download-btn" style="background: linear-gradient(45deg, #ff6b6b, #ee5a52); color: white; border: none; padding: 14px 25px; border-radius: 25px; cursor: pointer; font-size: 1em; font-weight: bold; min-width: 160px; box-shadow: 0 4px 15px rgba(238, 90, 82, 0.3);">
+                    PDF 저장
+                </button>
+                
+                <button style="background: linear-gradient(45deg, #4caf50, #66bb6a); color: white; border: none; padding: 14px 25px; border-radius: 25px; cursor: pointer; font-size: 1em; font-weight: bold; min-width: 160px; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);">
+                    새로 분석하기
+                </button>
+
+                <button style="background: linear-gradient(45deg, #2196f3, #21cbf3); color: white; border: none; padding: 14px 25px; border-radius: 25px; cursor: pointer; font-size: 1em; font-weight: bold; min-width: 160px; box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);">
+                    홈으로
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('pdf-download-btn').addEventListener('click', async function() {
+            console.log('PDF 다운로드 시작');
+            
+            try {
+                const currentDate = new Date().toISOString().split('T')[0];
+                const filename = `면접관상분석-남성-39세-일반사무직-${currentDate}.pdf`;
+                
+                const resultContainer = document.querySelector('.analysis-result-container');
+                
+                if (resultContainer) {
+                    // html2canvas로 HTML을 이미지로 변환
+                    console.log('HTML을 이미지로 변환 중...');
+                    const canvas = await html2canvas(resultContainer, {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: '#ffffff',
+                        width: 800,
+                        height: resultContainer.scrollHeight
+                    });
+                    
+                    // jsPDF로 PDF 생성
+                    console.log('PDF 생성 중...');
+                    const imgData = canvas.toDataURL('image/png');
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF({
+                        orientation: 'portrait',
+                        unit: 'mm',
+                        format: 'a4'
+                    });
+                    
+                    const imgWidth = 210; // A4 너비 (mm)
+                    const pageHeight = 295; // A4 높이 (mm)
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    let heightLeft = imgHeight;
+                    
+                    let position = 0;
+                    
+                    // 첫 페이지
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                    
+                    // 추가 페이지 (필요시)
+                    while (heightLeft >= 0) {
+                        position = heightLeft - imgHeight;
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+                    
+                    // PDF 다운로드
+                    pdf.save(filename);
+                    
+                    console.log('PDF 다운로드 완료:', filename);
+                    alert('PDF가 성공적으로 다운로드되었습니다!');
+                    
+                } else {
+                    console.error('분석 결과 컨테이너를 찾을 수 없음');
+                    alert('PDF 생성에 실패했습니다.');
+                }
+                
+            } catch (error) {
+                console.error('PDF 다운로드 오류:', error);
+                alert('PDF 다운로드 중 오류가 발생했습니다: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

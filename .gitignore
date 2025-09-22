@@ -1,0 +1,99 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Production builds
+/.next/
+/out/
+/build
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Logs
+logs/
+*.log
+
+# Temporary directories
+tmp/
+temp/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Uploads
+uploads/
+public/uploads/
+
+# Database
+*.db
+*.sqlite
+
+# AI generated content cache
+ai-cache/
+node_modules/
+.next/
+*.log
+logs/
+.env.local
+.DS_Store
+
+# Environment files with secrets
+ecosystem.config.js.backup
+.env.local
+.env.production
+
+# Test files with sensitive data
+test.png
+*.backup
+*.broken
+*.good
+
+# KG이니시스 결제 시스템 키파일들 (보안 중요)
+/keys/
+*.pem
+keypass.enc
+

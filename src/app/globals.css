@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Noto Sans KR', 'Pretendard', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply text-gray-900;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary-500 hover:bg-secondary-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-medium py-3 px-6 rounded-lg transition-all duration-200;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-md border border-gray-200 p-6;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent;
+  }
+  
+  .loading-spinner {
+    @apply animate-spin rounded-full border-4 border-gray-200 border-t-primary-500;
+  }
+}
+
+@layer utilities {
+  .container-custom {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .section-padding {
+    @apply py-12 md:py-16 lg:py-20;
+  }
+  
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* 커스텀 애니메이션 */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+.spin-animation {
+  animation: spin 1s linear infinite;
+}
+
+/* 모바일 터치 인터랙션 최적화 */
+* {
+  /* 터치 스크롤 부드럽게 */
+  -webkit-overflow-scrolling: touch;
+  /* 터치 시 하이라이트 제거 */
+  -webkit-tap-highlight-color: transparent;
+  /* 터치 콜아웃 메뉴 제거 */
+  -webkit-touch-callout: none;
+}
+
+/* 버튼과 클릭 가능한 요소들의 터치 영역 최적화 */
+button, 
+input[type="button"], 
+input[type="submit"], 
+.clickable {
+  /* 최소 터치 영역 44px 확보 */
+  min-height: 44px;
+  min-width: 44px;
+  /* 터치 피드백 개선 */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  /* 텍스트 선택 방지 */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 터치 상태 피드백 */
+button:active:not(:disabled), 
+.clickable:active {
+  transform: scale(0.98);
+  opacity: 0.8;
+}
+
+/* 포커스 및 호버 상태 개선 */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #7c4dff;
+  outline-offset: 2px;
+}
+
+/* 입력 필드 모바일 최적화 */
+input, 
+select, 
+textarea {
+  /* iOS에서 줌 방지를 위한 최소 폰트 크기 */
+  font-size: max(16px, 1rem);
+  /* 터치 영역 확보 */
+  min-height: 44px;
+  padding: 12px 16px;
+}
+
+/* 이미지 터치 최적화 */
+img {
+  /* 드래그 방지 */
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  /* 선택 방지 */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 스크롤 영역 최적화 */
+.scroll-container {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 640px) {
+  .container-custom {
+    @apply px-4;
+  }
+  
+  .btn-primary, .btn-secondary, .btn-outline {
+    @apply py-4 px-8 text-lg;
+    min-height: 48px;
+  }
+  
+  /* 모바일에서 호버 효과 제거 */
+  @media (hover: none) and (pointer: coarse) {
+    button:hover,
+    .clickable:hover {
+      transform: none;
+      background: initial;
+    }
+  }
+}
+
+/* 태블릿 최적화 */
+@media (min-width: 641px) and (max-width: 1024px) {
+  button, 
+  input[type="button"], 
+  input[type="submit"], 
+  .clickable {
+    min-height: 46px;
+    min-width: 46px;
+  }
+}

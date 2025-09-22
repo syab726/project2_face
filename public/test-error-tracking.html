@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 오류 트래킹 시스템 테스터</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .test-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .test-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn.danger { background: #dc3545; }
+        .btn.success { background: #28a745; }
+        .btn.warning { background: #ffc107; color: #333; }
+        .btn.info { background: #17a2b8; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .blue .number { color: #007bff; }
+        .red .number { color: #dc3545; }
+        .green .number { color: #28a745; }
+        .orange .number { color: #fd7e14; }
+        
+        .result {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .result.success {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        
+        .result.error {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .quick-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 오류 트래킹 시스템 테스터</h1>
+            <p>실제 오류 상황을 시뮬레이션하여 보상 시스템과 통계 추적을 테스트합니다</p>
+        </div>
+        
+        <div class="content">
+            <!-- 현재 통계 표시 -->
+            <div class="test-section">
+                <h2>📊 현재 시스템 통계</h2>
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card blue">
+                        <div class="number" id="totalErrors">-</div>
+                        <div class="label">총 오류 수</div>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="number" id="criticalErrors">-</div>
+                        <div class="label">Critical 오류</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="number" id="totalCompensation">-</div>
+                        <div class="label">총 보상 금액</div>
+                    </div>
+                    <div class="stat-card orange">
+                        <div class="number" id="pendingCompensation">-</div>
+                        <div class="label">보상 대기</div>
+                    </div>
+                </div>
+                <button class="btn info" onclick="refreshStats()">🔄 통계 새로고침</button>
+            </div>
+            
+            <!-- 단일 오류 시뮬레이션 -->
+            <div class="test-section">
+                <h2>🎯 단일 오류 시뮬레이션</h2>
+                <p style="margin-bottom: 15px; color: #666;">특정 타입의 오류를 생성하여 보상 시스템을 테스트합니다.</p>
+                
+                <div style="margin: 15px 0;">
+                    <label for="errorTypeSelect" style="display: block; margin-bottom: 5px; font-weight: 600;">오류 타입:</label>
+                    <select id="errorTypeSelect" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; width: 100%; max-width: 400px;">
+                        <option value="">🎲 랜덤 선택</option>
+                        <option value="payment_success_content_fail">💰 결제완료 → 컨텐츠 미전달 (Critical)</option>
+                        <option value="gemini_api_failure">🤖 Gemini API 완전 실패 (High)</option>
+                        <option value="json_parsing_error">📄 JSON 파싱 오류 (Medium)</option>
+                        <option value="interview_analysis_crash">💼 면접관상 분석 크래시 (High)</option>
+                        <option value="prompt_quality_degraded">📊 프롬프트 품질 저하 (Medium)</option>
+                    </select>
+                </div>
+                
+                <button class="btn success" onclick="simulateSingleError()">🚀 단일 오류 생성</button>
+                <div id="singleResult" class="result" style="display: none;"></div>
+            </div>
+            
+            <!-- 배치 오류 시뮬레이션 -->
+            <div class="test-section">
+                <h2>⚡ 배치 오류 시뮬레이션</h2>
+                <p style="margin-bottom: 15px; color: #666;">여러 오류를 연속으로 생성하여 시스템 부하를 테스트합니다.</p>
+                
+                <div style="margin: 15px 0;">
+                    <label for="batchCount" style="display: block; margin-bottom: 5px; font-weight: 600;">생성할 오류 개수:</label>
+                    <input type="number" id="batchCount" min="1" max="20" value="5" 
+                           style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; width: 100px;">
+                    <span style="color: #666; margin-left: 10px;">개 (0.5초 간격)</span>
+                </div>
+                
+                <button class="btn warning" onclick="simulateBatchErrors()">🔥 배치 오류 생성</button>
+                <div id="batchResult" class="result" style="display: none;"></div>
+            </div>
+            
+            <!-- 빠른 액션 -->
+            <div class="test-section">
+                <h2>⚡ 빠른 액션</h2>
+                <div class="quick-links">
+                    <button class="btn danger" onclick="generateCriticalErrors()">🚨 Critical 오류 3개 생성</button>
+                    <button class="btn info" onclick="generateCompensationTest()">💰 보상 테스트 시나리오</button>
+                    <button class="btn" onclick="window.open('/admin', '_blank')">👀 Admin 페이지 열기</button>
+                    <button class="btn" onclick="window.location.reload()">🔄 페이지 새로고침</button>
+                </div>
+            </div>
+            
+            <!-- 로딩 표시 -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div>테스트 실행 중...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isLoading = false;
+
+        // 통계 새로고침
+        async function refreshStats() {
+            if (isLoading) return;
+            
+            try {
+                showLoading();
+                const response = await fetch('/api/test/validate-stats?type=summary');
+                const result = await response.json();
+                
+                if (result.success) {
+                    const stats = result.data.summary;
+                    document.getElementById('totalErrors').textContent = stats.errors.total;
+                    document.getElementById('criticalErrors').textContent = stats.errors.critical;
+                    document.getElementById('totalCompensation').textContent = 
+                        stats.compensation.totalAmount.toLocaleString() + '원';
+                    document.getElementById('pendingCompensation').textContent = stats.compensation.pending;
+                } else {
+                    showResult('statsResult', `❌ 통계 로드 실패: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Stats refresh failed:', error);
+                showResult('statsResult', `❌ 통계 새로고침 오류: ${error.message}`, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // 단일 오류 시뮬레이션
+        async function simulateSingleError() {
+            if (isLoading) return;
+            
+            try {
+                showLoading();
+                const errorType = document.getElementById('errorTypeSelect').value;
+                
+                const response = await fetch('/api/test/simulate-errors', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        errorType: errorType || undefined,
+                        userEmail: `test-${Date.now()}@example.com`,
+                        orderId: `TEST-${Date.now()}`,
+                        serviceType: ['professional-physiognomy', 'mbti-face', 'face-saju', 'analyze-interview-face'][Math.floor(Math.random() * 4)]
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const data = result.data;
+                    showResult('singleResult', 
+                        `✅ 오류 시뮬레이션 성공!
+                        <br><strong>메시지:</strong> ${data.message}
+                        <br><strong>오류 ID:</strong> ${data.errorId}
+                        <br><strong>심각도:</strong> ${data.severity.toUpperCase()}
+                        <br><strong>보상 필요:</strong> ${data.compensationRequired ? '예' : '아니오'}
+                        <br><strong>예상 보상:</strong> ${data.estimatedCompensation.toLocaleString()}원
+                        <br><strong>사용자:</strong> ${data.testData.userEmail}
+                        <br><strong>주문번호:</strong> ${data.testData.orderId}`, 
+                        'success'
+                    );
+                    refreshStats(); // 통계 자동 업데이트
+                } else {
+                    showResult('singleResult', `❌ 시뮬레이션 실패: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResult('singleResult', `❌ 요청 오류: ${error.message}`, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // 배치 오류 시뮬레이션
+        async function simulateBatchErrors() {
+            if (isLoading) return;
+            
+            try {
+                showLoading();
+                const count = parseInt(document.getElementById('batchCount').value) || 5;
+                
+                const response = await fetch('/api/test/simulate-errors', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ count, interval: 500 })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const data = result.data;
+                    showResult('batchResult', 
+                        `✅ 배치 테스트 완료!
+                        <br><strong>총 오류:</strong> ${data.totalErrors}개
+                        <br><strong>보상 필요:</strong> ${data.compensationRequired}건
+                        <br><strong>총 예상 보상:</strong> ${data.totalEstimatedCompensation.toLocaleString()}원
+                        <br><strong>실행 시간:</strong> ${count * 0.5}초`, 
+                        'success'
+                    );
+                    refreshStats(); // 통계 자동 업데이트
+                } else {
+                    showResult('batchResult', `❌ 배치 테스트 실패: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResult('batchResult', `❌ 배치 요청 오류: ${error.message}`, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Critical 오류 3개 생성
+        async function generateCriticalErrors() {
+            document.getElementById('errorTypeSelect').value = 'payment_success_content_fail';
+            document.getElementById('batchCount').value = '3';
+            await simulateBatchErrors();
+        }
+
+        // 보상 테스트 시나리오
+        async function generateCompensationTest() {
+            if (isLoading) return;
+            
+            alert('💰 보상 테스트 시나리오를 실행합니다.\n다양한 심각도의 오류를 생성하여 보상 시스템을 테스트합니다.');
+            document.getElementById('batchCount').value = '7';
+            await simulateBatchErrors();
+        }
+
+        // 결과 표시
+        function showResult(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = message;
+            element.className = `result ${type}`;
+            element.style.display = 'block';
+        }
+
+        // 로딩 표시/숨기기
+        function showLoading() {
+            isLoading = true;
+            document.getElementById('loading').classList.add('show');
+            document.querySelectorAll('button').forEach(btn => btn.disabled = true);
+        }
+
+        function hideLoading() {
+            isLoading = false;
+            document.getElementById('loading').classList.remove('show');
+            document.querySelectorAll('button').forEach(btn => btn.disabled = false);
+        }
+
+        // 페이지 로드 시 통계 자동 로드
+        window.addEventListener('load', () => {
+            refreshStats();
+        });
+    </script>
+</body>
+</html>

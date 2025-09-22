@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>면접 관상 분석 섹션 테스트</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="analysis-result-container" style="padding: 20px; min-width: 800px; width: fit-content; max-width: none; overflow: visible;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); color: white; min-width: 750px; width: max-content; overflow: visible; white-space: normal;">
+            <h2 style="text-align: center; margin-bottom: 30px; font-size: 1.8em;">면접 관상 분석 결과 - 9개 섹션 테스트</h2>
+            
+            <div style="background: rgba(255,255,255,0.1); border-radius: 15px; padding: 25px; margin-bottom: 20px; width: 100%; overflow: visible; word-wrap: break-word;">
+                
+                <!-- 종합평가 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">종합평가</h3>
+                    <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; font-size: 1.05em; line-height: 1.7;">
+                        <p>39세 남성 지원자의 얼굴은 일반사무직 면접에 적합한 관상학적 특징들이 분명히 드러납니다. 천정궁(이마)의 넓이와 부드러운 곡선은 안정적인 성격과 문제 해결 능력을 나타내며, 이는 일반사무직에서 필수적인 특성입니다.</p>
+                    </div>
+                </div>
+
+                <!-- 첫인상 분석 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">첫인상 분석</h3>
+                    <div style="background: rgba(76, 175, 80, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">천정궁(이마)과 명궁(미간)에서 나타나는 관상학적 특징은 면접관의 첫 0.3초 판단에 매우 긍정적으로 작용합니다. 넓고 평평한 이마는 지적 능력과 창의성을 상징합니다.</p>
+                    </div>
+                </div>
+
+                <!-- 신뢰도 평가 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">신뢰도 평가</h3>
+                    <div style="background: rgba(33, 150, 243, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">전택궁(눈), 수성궁(입), 인중궁(인중)의 관상학적 분석 결과, 높은 신뢰도를 나타내는 특징들이 발견됩니다.</p>
+                    </div>
+                </div>
+
+                <!-- 리더십 잠재력 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">리더십 잠재력</h3>
+                    <div style="background: rgba(156, 39, 176, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">년상궁(코), 지각궁(턱선), 승장궁(턱)에서 보이는 관상학적 특징들은 리더십 잠재력을 시사합니다.</p>
+                    </div>
+                </div>
+
+                <!-- 팀워크 성향 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">팀워크 성향</h3>
+                    <div style="background: rgba(255, 152, 0, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">사공궁(관자놀이), 전곽궁(광대), 재백궁(눈썹)의 관상학적 분석을 통해 뛰어난 협업 능력을 확인할 수 있습니다.</p>
+                    </div>
+                </div>
+
+                <!-- 스트레스 관리 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">스트레스 관리</h3>
+                    <div style="background: rgba(233, 30, 99, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">명궁(미간), 인중궁(인중), 지각궁(턱선)에서 나타나는 관상학적 특징들은 압박 상황에서의 대처 능력을 보여줍니다.</p>
+                    </div>
+                </div>
+
+                <!-- 성장 가능성 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">성장 가능성</h3>
+                    <div style="background: rgba(0, 188, 212, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">천중궁(이마), 천정궁(이마 상부), 재백궁(눈썹)의 관상학적 분석 결과, 높은 학습 능력과 성장 잠재력이 발견됩니다.</p>
+                    </div>
+                </div>
+
+                <!-- 강점 분석 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">강점 분석</h3>
+                    <div style="background: rgba(76, 175, 80, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">12궁 관상학적 분석에서 가장 뛰어난 특징은 천정궁(이마)과 전택궁(눈)의 조화로운 발달입니다.</p>
+                    </div>
+                </div>
+
+                <!-- 보완점 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; font-size: 1.3em;">보완점</h3>
+                    <div style="background: rgba(255, 152, 0, 0.2); padding: 20px; border-radius: 12px;">
+                        <p style="line-height: 1.7;">관상학적으로 보완이 필요한 궁위는 지각궁(턱선)과 수성궁(입)의 긴장감 완화입니다.</p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <button id="pdf-download-btn" style="background: linear-gradient(45deg, #ff6b6b, #ee5a52); color: white; border: none; padding: 14px 25px; border-radius: 25px; cursor: pointer; font-size: 1em; font-weight: bold; min-width: 160px; box-shadow: 0 4px 15px rgba(238, 90, 82, 0.3);">
+                    PDF 저장 테스트
+                </button>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 15px;">
+                <h3 style="color: white; margin-bottom: 15px;">✅ 확인된 9개 섹션</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; font-size: 0.9em;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;">1. 종합평가</div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;">2. 첫인상 분석</div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;">3. 신뢰도 평가</div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;">4. 리더십 잠재력</div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;">5. 팀워크 성향</div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;">6. 스트레스 관리</div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;">7. 성장 가능성</div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;">8. 강점 분석</div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;">9. 보완점</div>
+                </div>
+                <p style="margin-top: 15px; color: rgba(255,255,255,0.8); font-size: 0.9em;">
+                    ❌ 제거된 섹션: 실전_면접_전략, 헤어_스타일링, 예상_질문_대비
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('pdf-download-btn').addEventListener('click', async function() {
+            console.log('PDF 다운로드 테스트 시작');
+            
+            try {
+                const currentDate = new Date().toISOString().split('T')[0];
+                const filename = `면접관상분석-9개섹션-테스트-${currentDate}.pdf`;
+                
+                const resultContainer = document.querySelector('.analysis-result-container');
+                
+                if (resultContainer) {
+                    // 실제 컨테이너 크기 측정
+                    const actualWidth = Math.max(resultContainer.scrollWidth, resultContainer.offsetWidth);
+                    const actualHeight = Math.max(resultContainer.scrollHeight, resultContainer.offsetHeight);
+                    
+                    console.log(`컨테이너 실제 크기: ${actualWidth}px x ${actualHeight}px`);
+                    
+                    // html2canvas로 HTML을 이미지로 변환 - 전체 영역 캡처
+                    console.log('HTML을 이미지로 변환 중...');
+                    const canvas = await html2canvas(resultContainer, {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: '#ffffff',
+                        width: actualWidth, // 실제 너비 사용
+                        height: actualHeight, // 실제 높이 사용
+                        scrollX: 0,
+                        scrollY: 0,
+                        foreignObjectRendering: true,
+                        logging: true,
+                        windowWidth: actualWidth,
+                        windowHeight: actualHeight
+                    });
+                    
+                    console.log(`캔버스 크기: ${canvas.width}px x ${canvas.height}px`);
+                    
+                    console.log('PDF 생성 중...');
+                    const imgData = canvas.toDataURL('image/png');
+                    const { jsPDF } = window.jspdf;
+                    
+                    // 캔버스 크기를 기준으로 PDF 크기 결정 (mm 단위)
+                    const imgWidthPx = canvas.width;
+                    const imgHeightPx = canvas.height;
+                    
+                    // 픽셀을 mm로 변환 (96 DPI 기준)
+                    const pxToMm = 25.4 / 96;
+                    const imgWidthMm = imgWidthPx * pxToMm;
+                    const imgHeightMm = imgHeightPx * pxToMm;
+                    
+                    console.log(`PDF 크기: ${imgWidthMm.toFixed(1)}mm x ${imgHeightMm.toFixed(1)}mm`);
+                    
+                    // PDF 생성 - 화면 크기에 정확히 맞춤
+                    const pdf = new jsPDF({
+                        orientation: imgWidthMm > imgHeightMm ? 'landscape' : 'portrait',
+                        unit: 'mm',
+                        format: [imgWidthMm, imgHeightMm] // 커스텀 크기
+                    });
+                    
+                    // 이미지를 PDF에 정확히 맞춰서 삽입 (여백 없음)
+                    pdf.addImage(imgData, 'PNG', 0, 0, imgWidthMm, imgHeightMm);
+                    
+                    pdf.save(filename);
+                    
+                    console.log('PDF 다운로드 완료:', filename);
+                    alert('9개 섹션 PDF가 성공적으로 다운로드되었습니다!');
+                    
+                } else {
+                    console.error('분석 결과 컨테이너를 찾을 수 없음');
+                    alert('PDF 생성에 실패했습니다.');
+                }
+                
+            } catch (error) {
+                console.error('PDF 다운로드 오류:', error);
+                alert('PDF 다운로드 중 오류가 발생했습니다: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

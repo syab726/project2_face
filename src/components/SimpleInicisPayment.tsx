@@ -38,6 +38,19 @@ export default function SimpleInicisPayment({
     setIsLoading(true);
     setError(null);
 
+    // AdSense 스크립트 간섭 방지
+    try {
+      // 기존 AdSense 관련 요소들 임시 제거
+      const adsenseElements = document.querySelectorAll('.adsbygoogle, script[src*="adsbygoogle"]');
+      adsenseElements.forEach(el => {
+        if (el.parentNode) {
+          el.parentNode.removeChild(el);
+        }
+      });
+    } catch (cleanupError) {
+      console.warn('AdSense cleanup failed:', cleanupError);
+    }
+
     // 전역 콜백 함수 설정
     window.paymentCompleteCallback = (result: any) => {
       console.log('✅ 전역 결제 완료 콜백 호출:', result);
@@ -108,7 +121,17 @@ export default function SimpleInicisPayment({
       document.body.appendChild(form);
 
       console.log('🚀 결제 페이지로 직접 이동');
-      form.submit();
+
+      // 다른 스크립트 간섭 방지를 위한 즉시 실행
+      setTimeout(() => {
+        try {
+          form.submit();
+        } catch (submitError) {
+          console.error('Form submit error:', submitError);
+          setError('결제 페이지로 이동 중 오류가 발생했습니다.');
+          setIsLoading(false);
+        }
+      }, 100);
 
     } catch (error: any) {
       console.error('❌ 결제 오류:', error);

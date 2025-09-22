@@ -94,22 +94,43 @@ export default function SimpleInicisPayment({
 
       console.log('💳 결제 데이터 생성 완료:', result.data);
 
-      // KG이니시스 표준 결제 방식 사용
+      // KG이니시스 JavaScript SDK 사용 방식
+      const isTestMode = result.data.paymentData.mid === 'INIpayTest';
+
+      // 이니시스 JavaScript SDK 동적 로드
+      const loadINIStdPay = () => {
+        return new Promise((resolve, reject) => {
+          // 기존 스크립트 제거
+          const existingScript = document.querySelector('script[src*="INIStdPay.js"]');
+          if (existingScript) {
+            existingScript.remove();
+          }
+
+          const script = document.createElement('script');
+          // 검색 결과에서 확인된 올바른 URL 사용
+          script.src = 'https://stdpay.inicis.com/stdjs/INIStdPay.js';
+          script.charset = 'UTF-8';
+
+          script.onload = () => {
+            console.log('✅ INIStdPay 스크립트 로드 완료');
+            resolve(window.INIStdPay);
+          };
+
+          script.onerror = () => {
+            reject(new Error('이니시스 결제 스크립트 로드 실패'));
+          };
+
+          document.head.appendChild(script);
+        });
+      };
+
+      // INIStdPay 로드 후 폼 처리
+      await loadINIStdPay();
+
       const form = document.createElement('form');
       form.method = 'POST';
       form.style.display = 'none';
-
-      // 테스트/운영 모드에 따라 결제 URL 결정
-      const isTestMode = result.data.paymentData.mid === 'INIpayTest';
-
-      // 이니시스 표준 모바일 결제 URL
-      if (isTestMode) {
-        // 테스트 환경: stdpay 도메인 사용
-        form.action = 'https://stgstdpay.inicis.com/inicis/std/mpi_proc.jsp';
-      } else {
-        // 운영 환경: stdpay 도메인 사용
-        form.action = 'https://stdpay.inicis.com/inicis/std/mpi_proc.jsp';
-      }
+      form.name = 'StdPayForm';
 
       // 모든 파라미터 추가
       Object.keys(result.data.paymentData).forEach(key => {
@@ -126,18 +147,21 @@ export default function SimpleInicisPayment({
 
       document.body.appendChild(form);
 
-      console.log('🚀 결제 페이지로 직접 이동');
+      console.log('🚀 INIStdPay.pay() 호출');
 
-      // 다른 스크립트 간섭 방지를 위한 즉시 실행
-      setTimeout(() => {
-        try {
-          form.submit();
-        } catch (submitError) {
-          console.error('Form submit error:', submitError);
-          setError('결제 페이지로 이동 중 오류가 발생했습니다.');
-          setIsLoading(false);
+      // INIStdPay.pay() 호출로 결제창 열기
+      try {
+        if (window.INIStdPay && window.INIStdPay.pay) {
+          window.INIStdPay.pay(form);
+          console.log('✅ INIStdPay.pay() 호출 완료');
+        } else {
+          throw new Error('INIStdPay 객체를 찾을 수 없습니다.');
         }
-      }, 100);
+      } catch (payError) {
+        console.error('INIStdPay.pay() 호출 오류:', payError);
+        setError('결제창을 열 수 없습니다. 잠시 후 다시 시도해주세요.');
+        setIsLoading(false);
+      }
 
     } catch (error: any) {
       console.error('❌ 결제 오류:', error);

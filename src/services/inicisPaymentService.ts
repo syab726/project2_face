@@ -127,48 +127,68 @@ class InicisPaymentService {
     const mKey = this.generateMKey();
     const verification = this.generateVerification(request.oid, request.price, this.SIGNKEY, timestamp);
 
-    // 이니시스 공식 가이드 기준 필수 파라미터 구성
+    // KG이니시스 표준 파라미터 구성 (INIStdPay.js 호환)
     const paymentData: any = {
-      // 필수 파라미터 (공식 샘플 기준)
+      // INIStdPay.js 필수 파라미터
       version: '1.0',                        // 버전
-      mid: this.MID,                         // 상점아이디
-      oid: request.oid,                      // 주문번호
-      price: request.price.toString(),       // 결제금액
+      mid: this.MID,                         // 상점아이디 (INIStdPay.js 필수)
+      oid: request.oid,                      // 주문번호 (INIStdPay.js 필수)
+      price: request.price.toString(),       // 결제금액 (INIStdPay.js 필수)
+      goodname: request.goodname,            // 상품명 (INIStdPay.js 필수)
+      buyername: request.buyername,          // 구매자명 (INIStdPay.js 필수)
+      buyertel: request.buyertel,            // 구매자연락처 (INIStdPay.js 필수)
+      buyeremail: request.buyeremail || '',  // 구매자이메일 (INIStdPay.js 필수)
+      gopaymethod: request.gopaymethod || 'Card', // 결제방법 (INIStdPay.js 필수)
+
+      // 표준 파라미터 (추가 호환성)
+      P_MID: this.MID,                       // 상점아이디 (표준)
+      P_OID: request.oid,                    // 주문번호 (표준)
+      P_AMT: request.price.toString(),       // 결제금액 (표준)
+      P_GOODS: request.goodname,             // 상품명 (표준)
+      P_UNAME: request.buyername,            // 구매자명 (표준)
+      P_MOBILE: request.buyertel,            // 구매자연락처 (표준)
+      P_EMAIL: request.buyeremail || '',     // 구매자이메일 (표준)
+      P_GOPAYMETHOD: request.gopaymethod || 'Card', // 결제방법 (표준)
+
+      // 필수 보안 파라미터
       timestamp: timestamp,                  // 타임스탬프 (필수!)
       signature: this.generateSignature(request.oid, request.price, timestamp), // 서명값
       verification: verification,            // 검증값
       mKey: mKey,                           // 상점키 해시값
 
-      // 상품 및 구매자 정보
-      goodname: request.goodname,            // 상품명
-      buyername: request.buyername,          // 구매자명
-      buyertel: request.buyertel,            // 구매자연락처
-      buyeremail: request.buyeremail || '',  // 구매자이메일
+      // URL 설정 (INIStdPay.js + 표준)
+      returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/return`,   // 결과수신URL (INIStdPay.js)
+      closeUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/close`,     // 결제창닫기URL (INIStdPay.js)
+      P_HPPURL: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/return`,   // 결과수신URL (표준)
+      P_CLOSEURL: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/close`, // 결제창닫기URL (표준)
 
-      // 결제 방법 설정
-      gopaymethod: request.gopaymethod || 'Card', // 결제방법 (Card, DirectBank, VBank 등)
-
-      // URL 설정 (공식 가이드 기준)
-      returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/return`,   // 결과수신URL
-      closeUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/close`,     // 결제창닫기URL
-      acceptmethod: 'below1000:card',        // 결제 수단 제한
+      // 결제 수단 설정 (테스트 환경에서는 더 유연하게)
+      acceptmethod: this.IS_TEST ? 'CARD' : 'below1000:card',        // INIStdPay.js 방식
+      P_ACCEPTMETHOD: this.IS_TEST ? 'CARD' : 'below1000:card',      // 표준 방식
 
       // 기본 설정
-      currency: 'WON',                       // 통화코드
-      charset: 'UTF-8'                       // 인코딩
+      currency: 'WON',                       // 통화코드 (INIStdPay.js)
+      charset: 'UTF-8',                      // 인코딩 (INIStdPay.js)
+      P_CURRENCY: 'WON',                     // 통화코드 (표준)
+      P_CHARSET: 'UTF-8'                     // 인코딩 (표준)
     };
 
-    // 모바일 결제시 추가 파라미터
+    // 모바일 결제시 추가 파라미터 (표준)
     if (isMobile) {
       paymentData.P_RESERVED = 'below1000=Y'; // 모바일 1000원 이하 간편결제
-      paymentData.P_NOTI = `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/noti`; // 노티URL
+      paymentData.P_NOTIURL = `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/noti`; // 노티URL (표준)
     }
 
-    console.log('💳 결제 데이터 생성됨 (공식 가이드 기준):', {
+    console.log('💳 KG이니시스 호환 결제 데이터 생성됨:', {
+      mid: paymentData.mid,
       oid: paymentData.oid,
       price: paymentData.price,
-      timestamp: paymentData.timestamp,
+      goodname: paymentData.goodname,
       buyername: paymentData.buyername,
+      P_MID: paymentData.P_MID,
+      P_OID: paymentData.P_OID,
+      P_AMT: paymentData.P_AMT,
+      timestamp: paymentData.timestamp,
       isMobile: isMobile,
       mode: this.IS_TEST ? 'TEST' : 'PRODUCTION',
       hasSignature: !!paymentData.signature,

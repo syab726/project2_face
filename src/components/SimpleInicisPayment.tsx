@@ -107,9 +107,14 @@ export default function SimpleInicisPayment({
           }
 
           const script = document.createElement('script');
-          // 검색 결과에서 확인된 올바른 URL 사용
-          script.src = 'https://stdpay.inicis.com/stdjs/INIStdPay.js';
+          // 테스트 모드인지 확인하여 적절한 SDK URL 사용
+          const isTestMode = result.data.paymentData.mid === 'INIpayTest';
+          script.src = isTestMode
+            ? 'https://stgstdpay.inicis.com/stdjs/INIStdPay.js'  // 테스트 환경
+            : 'https://stdpay.inicis.com/stdjs/INIStdPay.js';    // 운영 환경
           script.charset = 'UTF-8';
+
+          console.log(`🔧 이니시스 SDK 로드: ${isTestMode ? '테스트' : '운영'} 환경`, script.src);
 
           script.onload = () => {
             console.log('✅ INIStdPay 스크립트 로드 완료');
@@ -253,13 +258,47 @@ export default function SimpleInicisPayment({
         </div>
       </div>
 
+      {/* 테스트 카드 정보 */}
+      <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+        <div className="text-xs text-green-800">
+          <p className="font-semibold mb-2">🧪 KG이니시스 테스트 카드 정보:</p>
+          <div className="space-y-2">
+            <div className="p-2 bg-white rounded border border-green-200">
+              <p className="font-semibold text-blue-600">신한카드 (추천)</p>
+              <p>• 카드번호: <span className="font-mono">5434-0000-0000-0001</span></p>
+              <p>• 유효기간: <span className="font-mono">12/25</span></p>
+              <p>• CVC: <span className="font-mono">123</span></p>
+              <p>• 비밀번호 앞2자리: <span className="font-mono">12</span></p>
+            </div>
+            <div className="p-2 bg-white rounded border border-green-200">
+              <p className="font-semibold text-purple-600">BC카드</p>
+              <p>• 카드번호: <span className="font-mono">4217-0000-0000-0001</span></p>
+              <p>• 유효기간: <span className="font-mono">12/25</span></p>
+              <p>• CVC: <span className="font-mono">123</span></p>
+              <p>• ISP 비밀번호: <span className="font-mono">000000</span> (주민번호 앞6자리)</p>
+            </div>
+            <div className="p-2 bg-white rounded border border-green-200">
+              <p className="font-semibold text-red-600">롯데카드</p>
+              <p>• 카드번호: <span className="font-mono">5503-0000-0000-0001</span></p>
+              <p>• 유효기간: <span className="font-mono">12/25</span></p>
+              <p>• CVC: <span className="font-mono">123</span></p>
+              <p>• 비밀번호 앞2자리: <span className="font-mono">12</span></p>
+            </div>
+          </div>
+          <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded">
+            <p className="text-orange-600 font-medium text-xs">※ 결제창에서 해당 카드사 선택 후 위 정보 입력</p>
+            <p className="text-orange-600 font-medium text-xs">※ 테스트 환경에서는 실제 출금되지 않음</p>
+          </div>
+        </div>
+      </div>
+
       {/* 디버그 정보 */}
       <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
         <div className="text-xs text-gray-600">
           <p className="font-semibold">결제 방식:</p>
           <p>• 테스트 모드: 활성 (실제 결제 없음)</p>
-          <p>• 결제 페이지 직접 이동 방식 사용</p>
-          <p>• 테스트용 카드로 결제 프로세스 체험 가능</p>
+          <p>• 스테이징 환경 SDK 사용</p>
+          <p>• 위 테스트 카드로 결제 프로세스 체험 가능</p>
         </div>
       </div>
 

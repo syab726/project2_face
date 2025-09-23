@@ -19,49 +19,50 @@ export async function POST(request: NextRequest) {
       console.log('📦 JSON 데이터 수신:', JSON.stringify(jsonData, null, 2));
 
       paymentResult = {
-        resultCode: jsonData.resultCode,
-        resultMsg: jsonData.resultMsg,
-        tid: jsonData.tid,
-        mid: jsonData.mid,
-        oid: jsonData.oid,
-        price: parseInt(jsonData.price) || 0,
-        CARD_Num: jsonData.CARD_Num,
-        applDate: jsonData.applDate,
-        applTime: jsonData.applTime
+        resultCode: jsonData.P_RCODE || jsonData.resultCode,
+        resultMsg: jsonData.P_RMESG || jsonData.resultMsg,
+        tid: jsonData.P_TID || jsonData.tid,
+        mid: jsonData.P_MID || jsonData.mid,
+        oid: jsonData.P_OID || jsonData.oid,
+        price: parseInt(jsonData.P_AMT || jsonData.price) || 0,
+        CARD_Num: jsonData.P_CARD_NUM || jsonData.CARD_Num,
+        applDate: jsonData.P_AUTH_DT || jsonData.applDate,
+        applTime: jsonData.P_AUTH_TM || jsonData.applTime
       };
 
-      authToken = jsonData.authToken;
-      authUrl = jsonData.authUrl;
+      authToken = jsonData.P_AUTH_TOKEN || jsonData.authToken;
+      authUrl = jsonData.P_NEXT_URL || jsonData.authUrl;
     } else {
-      // FormData 형식
+      // FormData 형식 (KG이니시스 표준 파라미터)
       const formData = await request.formData();
       const formDataObj: any = {};
       formData.forEach((value, key) => {
         formDataObj[key] = value;
       });
-      console.log('📦 FormData 수신:', JSON.stringify(formDataObj, null, 2));
+      console.log('📦 KG이니시스 표준 FormData 수신:', JSON.stringify(formDataObj, null, 2));
 
       paymentResult = {
-        resultCode: formData.get('resultCode') as string,
-        resultMsg: formData.get('resultMsg') as string,
-        tid: formData.get('tid') as string,
-        mid: formData.get('mid') as string,
-        oid: formData.get('orderNumber') as string || formData.get('oid') as string,  // orderNumber로도 전달됨
-        price: parseInt(formData.get('TotPrice') as string || formData.get('price') as string) || 0,
-        CARD_Num: formData.get('CARD_Num') as string || formData.get('cardnum') as string,
-        applDate: formData.get('applDate') as string,
-        applTime: formData.get('applTime') as string
+        resultCode: formData.get('P_RCODE') as string || formData.get('resultCode') as string,
+        resultMsg: formData.get('P_RMESG') as string || formData.get('resultMsg') as string,
+        tid: formData.get('P_TID') as string || formData.get('tid') as string,
+        mid: formData.get('P_MID') as string || formData.get('mid') as string,
+        oid: formData.get('P_OID') as string || formData.get('oid') as string,
+        price: parseInt(formData.get('P_AMT') as string || formData.get('price') as string) || 0,
+        CARD_Num: formData.get('P_CARD_NUM') as string || formData.get('CARD_Num') as string,
+        applDate: formData.get('P_AUTH_DT') as string || formData.get('applDate') as string,
+        applTime: formData.get('P_AUTH_TM') as string || formData.get('applTime') as string
       };
 
-      authToken = formData.get('authToken') as string;
-      authUrl = formData.get('authUrl') as string;
+      authToken = formData.get('P_AUTH_TOKEN') as string || formData.get('authToken') as string;
+      authUrl = formData.get('P_NEXT_URL') as string || formData.get('authUrl') as string;
     }
 
-    console.log('💳 결제 결과 수신됨:', {
-      resultCode: paymentResult.resultCode,
-      oid: paymentResult.oid,
-      price: paymentResult.price,
-      tid: paymentResult.tid
+    console.log('💳 KG이니시스 결제 결과 수신됨:', {
+      P_RCODE: paymentResult.resultCode,
+      P_OID: paymentResult.oid,
+      P_AMT: paymentResult.price,
+      P_TID: paymentResult.tid,
+      P_AUTH_TOKEN: authToken ? '있음' : '없음'
     });
 
     // authToken이 있으면 승인 처리 필요
@@ -77,6 +78,14 @@ export async function POST(request: NextRequest) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            // KG이니시스 표준 파라미터로 전달
+            P_AUTH_TOKEN: authToken,
+            P_NEXT_URL: authUrl,
+            P_MID: paymentResult.mid,
+            P_OID: paymentResult.oid,
+            P_AMT: paymentResult.price.toString(),
+            P_TIMESTAMP: Date.now().toString(),
+            // 레거시 지원을 위한 백워드 호환성
             authToken,
             authUrl,
             mid: paymentResult.mid,
@@ -246,7 +255,6 @@ export async function POST(request: NextRequest) {
             headers: { 'Content-Type': 'text/html; charset=utf-8' }
           });
         }
-      }
     }
 
     // 결제 성공 처리
@@ -572,22 +580,22 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
 
     const paymentResult: InicisPaymentResult = {
-      resultCode: searchParams.get('resultCode') || '',
-      resultMsg: searchParams.get('resultMsg') || '',
-      tid: searchParams.get('tid') || '',
-      mid: searchParams.get('mid') || '',
-      oid: searchParams.get('oid') || '',
-      price: parseInt(searchParams.get('price') || '0'),
-      CARD_Num: searchParams.get('CARD_Num') || undefined,
-      applDate: searchParams.get('applDate') || undefined,
-      applTime: searchParams.get('applTime') || undefined
+      resultCode: searchParams.get('P_RCODE') || searchParams.get('resultCode') || '',
+      resultMsg: searchParams.get('P_RMESG') || searchParams.get('resultMsg') || '',
+      tid: searchParams.get('P_TID') || searchParams.get('tid') || '',
+      mid: searchParams.get('P_MID') || searchParams.get('mid') || '',
+      oid: searchParams.get('P_OID') || searchParams.get('oid') || '',
+      price: parseInt(searchParams.get('P_AMT') || searchParams.get('price') || '0'),
+      CARD_Num: searchParams.get('P_CARD_NUM') || searchParams.get('CARD_Num') || undefined,
+      applDate: searchParams.get('P_AUTH_DT') || searchParams.get('applDate') || undefined,
+      applTime: searchParams.get('P_AUTH_TM') || searchParams.get('applTime') || undefined
     };
 
-    console.log('📦 GET 파라미터 수신:', {
-      resultCode: paymentResult.resultCode,
-      oid: paymentResult.oid,
-      price: paymentResult.price,
-      tid: paymentResult.tid
+    console.log('📦 KG이니시스 GET 파라미터 수신:', {
+      P_RCODE: paymentResult.resultCode,
+      P_OID: paymentResult.oid,
+      P_AMT: paymentResult.price,
+      P_TID: paymentResult.tid
     });
 
     // 결제 성공 처리
@@ -601,7 +609,7 @@ export async function GET(request: NextRequest) {
         paymentResult.price
       );
 
-      console.log('✅ GET 결제 성공 처리 완료');
+      console.log('✅ KG이니시스 GET 결제 성공 처리 완료');
 
       // 결제 성공 HTML 반환
       const successHtml = `

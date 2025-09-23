@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import inicisPaymentService from '@/services/inicisPaymentService';
 import realMetricsStore from '@/services/realMetricsStore';
+import { generatePaymentToken, generateSecurityHash } from '@/lib/auth';
 
 /**
  * KG이니시스 결제 승인 API (표준 파라미터 기준)
@@ -106,18 +107,49 @@ export async function POST(request: NextRequest) {
         parseInt(result.P_AMT || result.TotPrice || finalPrice)
       );
 
+      // 보안 강화: JWT 토큰 및 보안 해시 생성
+      const tid = result.P_TID || result.tid;
+      const oid = result.P_OID || result.MOID || finalOid;
+      const amount = parseInt(result.P_AMT || result.TotPrice || finalPrice);
+      const timestamp = Date.now();
+      const clientIP = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+
+      const securityToken = generatePaymentToken({
+        tid,
+        oid,
+        amount,
+        serviceType: extractedServiceType,
+        timestamp,
+        ip: clientIP
+      });
+
+      const securityHash = generateSecurityHash(tid, oid, timestamp);
+
+      console.log('🔐 보안 토큰 생성 완료:', {
+        tid,
+        oid,
+        serviceType: extractedServiceType,
+        tokenLength: securityToken.length,
+        hashLength: securityHash.length
+      });
+
       return NextResponse.json({
         success: true,
         message: 'KG이니시스 결제가 성공적으로 승인되었습니다.',
         data: {
-          tid: result.P_TID || result.tid,
-          oid: result.P_OID || result.MOID || finalOid,
-          price: result.P_AMT || result.TotPrice || finalPrice,
+          tid,
+          oid,
+          price: amount,
           payMethod: result.P_TYPE || result.payMethod,
           applDate: result.P_AUTH_DT || result.applDate,
           applTime: result.P_AUTH_TM || result.applTime,
           CARD_Code: result.P_CARD_ISSUER_CODE || result.CARD_Code,
-          CARD_Num: result.P_CARD_NUM || result.CARD_Num
+          CARD_Num: result.P_CARD_NUM || result.CARD_Num,
+          // 보안 강화 데이터
+          securityToken,
+          securityHash,
+          timestamp,
+          serviceType: extractedServiceType
         }
       });
     } else {

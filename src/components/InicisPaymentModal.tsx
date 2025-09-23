@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import InicisPayment from './InicisPayment';
+import SimpleInicisPayment from './SimpleInicisPayment';
 
 interface InicisPaymentModalProps {
   isOpen: boolean;
@@ -93,7 +93,7 @@ export default function InicisPaymentModal({
 
         {/* 결제 컴포넌트 */}
         <div className="p-6">
-          <InicisPayment
+          <SimpleInicisPayment
             serviceType={serviceType}
             amount={amount}
             productName={serviceName}

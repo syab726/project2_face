@@ -899,7 +899,7 @@ function GwansangPageContent({ initialView }: GwansangPageContentProps) {
                 position: 'relative',
                 cursor: 'pointer'
               }}
-              onClick={() => window.location.href = '/gwansang/mbti'}
+              onClick={() => window.location.href = '/gwansang/mbti-purchase'}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-2px)';
                 e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,0,0,0.15)';
@@ -964,7 +964,7 @@ function GwansangPageContent({ initialView }: GwansangPageContentProps) {
                 transition: 'all 0.3s ease',
                 cursor: 'pointer'
               }}
-              onClick={() => window.location.href = '/gwansang/saju'}
+              onClick={() => window.location.href = '/gwansang/saju-purchase'}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-2px)';
                 e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,0,0,0.15)';
@@ -1066,7 +1066,7 @@ function GwansangPageContent({ initialView }: GwansangPageContentProps) {
                 transition: 'all 0.3s ease',
                 cursor: 'pointer'
               }}
-              onClick={() => window.location.href = '/gwansang/original'}
+              onClick={() => window.location.href = '/gwansang/original-purchase'}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-2px)';
                 e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,0,0,0.15)';

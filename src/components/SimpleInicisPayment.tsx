@@ -7,7 +7,7 @@ import type { APIResponse } from '@/types/analysis';
 declare global {
   interface Window {
     INIStdPay: {
-      pay: (form: HTMLFormElement) => void;
+      pay: (action: string, acceptCharset: string, enctype: string, payForm: HTMLFormElement, payFormName: string, callback: (result: any) => void) => void;
     };
     // 결제 완료 콜백 함수
     paymentCompleteCallback?: (result: any) => void;
@@ -97,7 +97,7 @@ export default function SimpleInicisPayment({
       // KG이니시스 JavaScript SDK 사용 방식
       const isTestMode = result.data.paymentData.mid === 'INIpayTest';
 
-      // 이니시스 JavaScript SDK 동적 로드
+      // 로컬 INIStdPay.js 동적 로드 (심사용)
       const loadINIStdPay = () => {
         return new Promise((resolve, reject) => {
           // 기존 스크립트 제거
@@ -107,18 +107,17 @@ export default function SimpleInicisPayment({
           }
 
           const script = document.createElement('script');
-          // 테스트 모드인지 확인하여 적절한 SDK URL 사용
-          const isTestMode = result.data.paymentData.mid === 'INIpayTest';
-          script.src = isTestMode
-            ? 'https://stgstdpay.inicis.com/stdjs/INIStdPay.js'  // 테스트 환경
-            : 'https://stdpay.inicis.com/stdjs/INIStdPay.js';    // 운영 환경
+          // 로컬 심사용 파일 사용
+          script.src = '/INIStdPay.js';
           script.charset = 'UTF-8';
 
-          console.log(`🔧 이니시스 SDK 로드: ${isTestMode ? '테스트' : '운영'} 환경`, script.src);
+          console.log('🔧 로컬 심사용 INIStdPay SDK 로드:', script.src);
 
           script.onload = () => {
             console.log('✅ INIStdPay 스크립트 로드 완료');
-            resolve(window.INIStdPay);
+            setTimeout(() => {
+              resolve(window.INIStdPay);
+            }, 100); // 스크립트 실행 대기
           };
 
           script.onerror = () => {
@@ -154,11 +153,33 @@ export default function SimpleInicisPayment({
 
       console.log('🚀 INIStdPay.pay() 호출');
 
-      // INIStdPay.pay() 호출로 결제창 열기
+      // INIStdPay.pay() 호출로 결제창 열기 (심사용)
       try {
         if (window.INIStdPay && window.INIStdPay.pay) {
-          window.INIStdPay.pay(form);
-          console.log('✅ INIStdPay.pay() 호출 완료');
+          // 심사용 INIStdPay.js의 파라미터 형식에 맞춤
+          window.INIStdPay.pay(
+            '', // action
+            'UTF-8', // acceptCharset
+            'application/x-www-form-urlencoded', // enctype
+            form, // payForm
+            'StdPayForm', // payFormName
+            (result: any) => {
+              // 결제 완료 콜백
+              console.log('✅ 심사용 결제 완료:', result);
+              setIsLoading(false);
+              if (result.error) {
+                setError(result.message);
+                if (onPaymentError) {
+                  onPaymentError(result);
+                }
+              } else {
+                if (onPaymentComplete) {
+                  onPaymentComplete(result);
+                }
+              }
+            }
+          );
+          console.log('✅ 심사용 INIStdPay.pay() 호출 완료');
         } else {
           throw new Error('INIStdPay 객체를 찾을 수 없습니다.');
         }

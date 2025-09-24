@@ -106,29 +106,71 @@ window.INIStdPay = {
       form.submit();
       console.log('✅ KG이니시스 실제 결제창 제출 완료 - 심사용');
 
-      // 결제창이 닫힐 때까지 대기하면서 결과 처리
+      // 결제 완료 플래그
+      let paymentCompleted = false;
+
+      // 결제 완료 이벤트 리스너 (return URL에서 postMessage로 전달)
+      const messageListener = (event) => {
+        if (event.data && event.data.type === 'PAYMENT_SUCCESS') {
+          console.log('✅ 실제 결제 완료 확인됨:', event.data);
+          paymentCompleted = true;
+          clearInterval(checkClosed);
+          window.removeEventListener('message', messageListener);
+
+          if (callback) {
+            callback(event.data.data || this.generateSuccessResult());
+          }
+        } else if (event.data && event.data.type === 'PAYMENT_FAILED') {
+          console.log('❌ 결제 실패 확인됨:', event.data);
+          clearInterval(checkClosed);
+          window.removeEventListener('message', messageListener);
+
+          if (callback) {
+            callback({
+              error: true,
+              message: event.data.data?.message || '결제에 실패했습니다'
+            });
+          }
+        }
+      };
+
+      window.addEventListener('message', messageListener);
+
+      // 결제창이 닫힐 때까지 대기
       const checkClosed = setInterval(() => {
         if (paymentWindow.closed) {
           clearInterval(checkClosed);
+          window.removeEventListener('message', messageListener);
           console.log('💳 결제창이 닫혔습니다');
 
-          // 심사용 - 결제창이 닫히면 성공으로 처리 (실제로는 return URL에서 처리)
-          if (callback) {
-            callback(this.generateSuccessResult());
+          // 실제 결제 완료 없이 창만 닫힌 경우
+          if (!paymentCompleted) {
+            console.log('⚠️ 결제 미완료 상태로 창이 닫혔습니다');
+            if (callback) {
+              callback({
+                error: true,
+                message: '결제가 취소되었거나 완료되지 않았습니다'
+              });
+            }
           }
         }
       }, 1000);
 
-      // 15초 후에도 창이 안 닫히면 타임아웃
+      // 30초 후 타임아웃
       setTimeout(() => {
-        if (!paymentWindow.closed) {
+        if (!paymentWindow.closed && !paymentCompleted) {
           clearInterval(checkClosed);
+          window.removeEventListener('message', messageListener);
           console.log('⏰ 결제창 타임아웃');
+
           if (callback) {
-            callback(this.generateSuccessResult()); // 심사용은 성공으로 처리
+            callback({
+              error: true,
+              message: '결제 시간이 초과되었습니다'
+            });
           }
         }
-      }, 15000);
+      }, 30000);
 
     } else {
       console.error('❌ 결제창 팝업이 차단되었습니다');

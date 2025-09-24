@@ -57,10 +57,10 @@ window.INIStdPay = {
 
     console.log('💳 KG이니시스 스테이징 결제창 직접 호출');
 
-    // KG이니시스 스테이징 결제 URL에 직접 POST 요청
+    // KG이니시스 테스트 결제 URL로 POST 요청
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = 'https://stgstdpay.inicis.com/inicis/stdpay_pc_ini.php';
+    form.action = 'https://stgstdpay.inicis.com/stdpay/stdpay_pc_ini.php';
     form.target = '_blank';
     form.style.display = 'none';
 

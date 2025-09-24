@@ -154,7 +154,7 @@ export default function SajuPurchasePage() {
             <div className="bg-white rounded-lg shadow-lg p-8">
               <div className="text-center mb-6">
                 <div className="text-4xl font-bold text-red-600 mb-2">
-                  9,900원
+                  19,900원
                 </div>
                 <p className="text-gray-600">부가세 포함</p>
               </div>
@@ -179,7 +179,7 @@ export default function SajuPurchasePage() {
                 <div className="w-full">
                   <SimpleInicisPayment
                     serviceType="face-saju"
-                    amount={9900}
+                    amount={19900}
                     productName="관상 + 사주 분석"
                     onPaymentComplete={handlePaymentComplete}
                     onPaymentError={handlePaymentError}

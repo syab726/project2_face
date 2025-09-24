@@ -150,7 +150,7 @@ export default function InterviewInfoPage() {
             <div className="bg-white rounded-lg shadow-lg p-8">
               <div className="text-center mb-6">
                 <div className="text-4xl font-bold text-blue-600 mb-2">
-                  5,900원
+                  900원
                 </div>
                 <p className="text-gray-600">부가세 포함</p>
               </div>
@@ -175,7 +175,7 @@ export default function InterviewInfoPage() {
                 <div className="w-full">
                   <SimpleInicisPayment
                     serviceType="interview"
-                    amount={5900}
+                    amount={900}
                     productName="면접 관상 분석"
                     onPaymentComplete={handlePaymentComplete}
                     onPaymentError={handlePaymentError}

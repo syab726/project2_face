@@ -154,7 +154,7 @@ export default function MBTIPurchasePage() {
             <div className="bg-white rounded-lg shadow-lg p-8">
               <div className="text-center mb-6">
                 <div className="text-4xl font-bold text-purple-600 mb-2">
-                  7,900원
+                  3,900원
                 </div>
                 <p className="text-gray-600">부가세 포함</p>
               </div>
@@ -179,7 +179,7 @@ export default function MBTIPurchasePage() {
                 <div className="w-full">
                   <SimpleInicisPayment
                     serviceType="mbti-face"
-                    amount={7900}
+                    amount={3900}
                     productName="MBTI + 관상 분석"
                     onPaymentComplete={handlePaymentComplete}
                     onPaymentError={handlePaymentError}

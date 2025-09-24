@@ -50,12 +50,12 @@ export default function HomePage() {
           <section className="mb-12">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">🎯 제공 서비스</h2>
             <div className="space-y-6">
-              <Link href="/gwansang?view=mbti-face" className="block bg-gradient-to-r from-pink-50 to-rose-50 p-6 rounded-lg border border-pink-200 hover:shadow-lg transition-all duration-200">
+              <Link href="/gwansang/mbti-purchase" className="block bg-gradient-to-r from-pink-50 to-rose-50 p-6 rounded-lg border border-pink-200 hover:shadow-lg transition-all duration-200">
                 <div className="flex items-center mb-4">
                   <div className="text-2xl mr-3">🧠</div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800">MBTI × 관상 분석</h3>
-                    <p className="text-sm text-gray-600">3,900원</p>
+                    <p className="text-sm text-gray-600">7,900원</p>
                   </div>
                 </div>
                 <p className="text-gray-700 text-sm leading-relaxed">
@@ -63,12 +63,12 @@ export default function HomePage() {
                 </p>
               </Link>
               
-              <Link href="/gwansang?view=face" className="block bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200 hover:shadow-lg transition-all duration-200">
+              <Link href="/gwansang/original-purchase" className="block bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200 hover:shadow-lg transition-all duration-200">
                 <div className="flex items-center mb-4">
                   <div className="text-2xl mr-3">👁️</div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800">정통 관상 분석</h3>
-                    <p className="text-sm text-gray-600">9,900원</p>
+                    <p className="text-sm text-gray-600">4,900원</p>
                   </div>
                 </div>
                 <p className="text-gray-700 text-sm leading-relaxed">
@@ -76,12 +76,12 @@ export default function HomePage() {
                 </p>
               </Link>
               
-              <Link href="/gwansang?view=interview" className="block bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-lg border border-green-200 hover:shadow-lg transition-all duration-200">
+              <Link href="/gwansang/interview-purchase" className="block bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-lg border border-green-200 hover:shadow-lg transition-all duration-200">
                 <div className="flex items-center mb-4">
                   <div className="text-2xl mr-3">💼</div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800">면접 관상 분석</h3>
-                    <p className="text-sm text-gray-600">900원</p>
+                    <p className="text-sm text-gray-600">5,900원</p>
                   </div>
                 </div>
                 <p className="text-gray-700 text-sm leading-relaxed">
@@ -89,12 +89,12 @@ export default function HomePage() {
                 </p>
               </Link>
               
-              <Link href="/gwansang?view=face-saju" className="block bg-gradient-to-r from-yellow-50 to-amber-50 p-6 rounded-lg border border-yellow-200 hover:shadow-lg transition-all duration-200">
+              <Link href="/gwansang/saju-purchase" className="block bg-gradient-to-r from-yellow-50 to-amber-50 p-6 rounded-lg border border-yellow-200 hover:shadow-lg transition-all duration-200">
                 <div className="flex items-center mb-4">
                   <div className="text-2xl mr-3">🔮</div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800">관상 + 사주 분석</h3>
-                    <p className="text-sm text-gray-600">19,900원</p>
+                    <p className="text-sm text-gray-600">9,900원</p>
                   </div>
                 </div>
                 <p className="text-gray-700 text-sm leading-relaxed">

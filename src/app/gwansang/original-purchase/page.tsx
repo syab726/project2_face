@@ -175,7 +175,7 @@ export default function OriginalPurchasePage() {
               <div className="space-y-4">
                 <div className="w-full">
                   <SimpleInicisPayment
-                    serviceType="face"
+                    serviceType="professional-physiognomy"
                     amount={4900}
                     productName="정통 관상 분석"
                     onPaymentComplete={handlePaymentComplete}

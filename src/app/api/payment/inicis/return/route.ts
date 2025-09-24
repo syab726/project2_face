@@ -306,14 +306,14 @@ export async function POST(request: NextRequest) {
             console.log('🏠 window:', window);
             console.log('🔗 window.parent !== window:', window.parent !== window);
 
-            // 서비스 타입별 분석 페이지 맵핑
+            // 서비스 타입별 분석 페이지 맵핑 (결제 완료 후 관상 분석 페이지로)
             const analysisPageMap = {
-                'professional-physiognomy': '/gwansang/original',
-                'mbti-face': '/gwansang/mbti',
-                'fortune': '/fortune',
-                'face-saju': '/gwansang/saju',
-                'interview': '/gwansang/interview',
-                'ideal-type': '/gwansang'
+                'professional-physiognomy': '/gwansang?view=face',
+                'mbti-face': '/gwansang?view=mbti-face',
+                'fortune': '/gwansang?view=face',
+                'face-saju': '/gwansang?view=face-saju',
+                'interview': '/gwansang?view=interview',
+                'ideal-type': '/gwansang?view=face'
             };
 
             // OID에서 서비스 타입 추출

@@ -149,6 +149,7 @@ class InicisPaymentService {
       P_MOBILE: request.buyertel,            // 구매자연락처 (표준)
       P_EMAIL: request.buyeremail || '',     // 구매자이메일 (표준)
       P_GOPAYMETHOD: request.gopaymethod || 'Card', // 결제방법 (표준)
+      P_INI_PAYMENT: 'CARD',                 // 결제수단 (필수!)
 
       // 필수 보안 파라미터
       timestamp: timestamp,                  // 타임스탬프 (필수!)
@@ -170,7 +171,15 @@ class InicisPaymentService {
       currency: 'WON',                       // 통화코드 (INIStdPay.js)
       charset: 'UTF-8',                      // 인코딩 (INIStdPay.js)
       P_CURRENCY: 'WON',                     // 통화코드 (표준)
-      P_CHARSET: 'UTF-8'                     // 인코딩 (표준)
+      P_CHARSET: 'UTF-8',                    // 인코딩 (표준)
+
+      // 추가 필수 파라미터들
+      P_NEXT_URL: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/return`, // 결제완료후 이동할 상점 URL
+      P_NOTI_URL: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/inicis/noti`,   // 결과통보 URL
+      P_HPP_METHOD: '1',                     // 결제창호출 방식 (1: 새창, 2: iframe)
+      P_NOTI: 'Y',                          // 노티 사용여부
+      P_TAX: 'N',                           // 과세여부 (Y: 과세, N: 비과세)
+      P_TAXFREE: '0',                       // 면세금액
     };
 
     // 모바일 결제시 추가 파라미터 (표준)

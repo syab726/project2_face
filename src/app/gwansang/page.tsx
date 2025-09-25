@@ -1160,13 +1160,10 @@ function GwansangPageContent({ initialView }: GwansangPageContentProps) {
         {/* 광고 배너 - 홈에서만 표시 */}
         {currentView === 'home' && (
           <div style={{
-            position: 'fixed',
-            bottom: '0',
-            left: '0',
-            right: '0',
-            zIndex: 1000,
             background: '#fff',
-            borderTop: '1px solid #e0e0e0'
+            borderTop: '1px solid #e0e0e0',
+            marginTop: '20px',
+            padding: '10px 0'
           }}>
             <AdBanner position="bottom" />
           </div>

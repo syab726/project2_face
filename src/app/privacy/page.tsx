@@ -308,12 +308,11 @@ export default function PrivacyPage() {
                 border: '1px solid #dee2e6'
               }}>
                 <h3 style={{ color: '#333', margin: '0 0 15px', fontSize: '1.1rem' }}>
-                  📞 개인정보 보호책임자 연락처
+                  개인정보 보호책임자 연락처
                 </h3>
                 <div style={{ color: '#555' }}>
-                  <p style={{ marginBottom: '8px' }}><strong>담당자:</strong> 개인정보보호팀</p>
+                  <p style={{ marginBottom: '8px' }}><strong>담당자:</strong> 개인정보보호 담당자</p>
                   <p style={{ marginBottom: '8px' }}><strong>이메일:</strong> syab726@gmail.com</p>
-                  <p style={{ marginBottom: '8px' }}><strong>운영시간:</strong> 평일 09:00 - 18:00</p>
                   <p style={{ marginBottom: '0' }}><strong>처리 방침:</strong> 개인정보 미수집으로 인한 문의만 처리</p>
                 </div>
               </div>

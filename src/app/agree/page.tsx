@@ -49,12 +49,6 @@ export default function AgreePage() {
                 </div>
               </div>
               
-              <div>
-                <h3 className="text-lg font-medium text-gray-800 mb-2">3. 결과물 이용</h3>
-                <p className="leading-relaxed">
-                  분석 결과 및 생성된 PDF는 개인적 용도로만 사용 가능하며, 상업적 이용은 금지됩니다.
-                </p>
-              </div>
             </div>
           </section>
 
@@ -79,7 +73,6 @@ export default function AgreePage() {
                 <ul className="list-disc list-inside text-gray-700 space-y-1 ml-4">
                   <li>결제는 완료되었으나 서비스가 제공되지 않은 경우</li>
                   <li>시스템 오류로 인해 분석 결과를 받을 수 없는 경우</li>
-                  <li>기술적 문제로 PDF 다운로드가 불가능한 경우</li>
                   <li>중복 결제가 발생한 경우</li>
                 </ul>
               </div>

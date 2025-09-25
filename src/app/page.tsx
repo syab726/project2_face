@@ -37,7 +37,6 @@ export default function HomePage() {
           {/* 서비스 개요 */}
           <section className="mb-12">
             <div className="text-center mb-8">
-              <div className="text-6xl mb-4">🤖✨</div>
               <h2 className="text-2xl font-bold text-gray-800 mb-4">AI로 알아보는 관상, MBTI, 사주</h2>
               <p className="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
                 AI 기술을 활용하여 얼굴 사진을 분석하고 관상, 사주, MBTI 정보를 제공하는 

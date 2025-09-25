@@ -859,7 +859,7 @@ function GwansangPageContent({ initialView }: GwansangPageContentProps) {
           <>
             <header style={{
               textAlign: 'center',
-              padding: '40px 16px 20px'
+              padding: '20px 16px 10px'
             }}>
               <h1 style={{
                 fontSize: 'clamp(1.8rem, 5vw, 2.5rem)',
@@ -873,7 +873,7 @@ function GwansangPageContent({ initialView }: GwansangPageContentProps) {
                 fontSize: 'clamp(0.9rem, 3vw, 1.1rem)',
                 color: '#666',
                 textAlign: 'center',
-                marginBottom: '20px',
+                marginBottom: '10px',
                 lineHeight: '1.4',
                 padding: '0 16px'
               }}>AI가 알려주는 나의 얼굴 속<br className="mobile-break" /> 성향, 운명, 그리고 궁합까지</p>

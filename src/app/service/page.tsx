@@ -21,11 +21,10 @@ export default function ServicePage() {
           {/* 서비스 개요 */}
           <section className="mb-12">
             <div className="text-center mb-8">
-              <div className="text-6xl mb-4">🤖✨</div>
               <h2 className="text-2xl font-bold text-gray-800 mb-4">내 얼굴 탐구생활</h2>
               <p className="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
-                AI 기술을 활용하여 얼굴 사진을 분석하고 관상, 사주, MBTI, 이상형 등의 정보를 제공하는 
-                <strong className="text-indigo-600"> 디지털 콘텐츠 서비스</strong>입니다.
+                AI 기술을 활용하여 얼굴 사진을 분석하고 관상, 사주, MBTI, 이상형 등의 정보를 제공하는<br/>
+                <strong className="text-indigo-600">디지털 콘텐츠 서비스</strong>입니다.
               </p>
             </div>
           </section>

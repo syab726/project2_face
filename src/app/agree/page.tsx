@@ -38,10 +38,15 @@ export default function AgreePage() {
               </div>
               
               <div>
-                <h3 className="text-lg font-medium text-gray-800 mb-2">2. 개인정보 보호</h3>
-                <p className="leading-relaxed">
-                  업로드된 사진은 분석 완료 후 즉시 삭제되며, 개인정보는 안전하게 보호됩니다.
-                </p>
+                <h3 className="text-lg font-medium text-gray-800 mb-2">2. 개인정보 보호 - 전혀 수집하지 않습니다</h3>
+                <div className="bg-green-50 p-3 rounded-lg border border-green-200">
+                  <p className="leading-relaxed text-green-800">
+                    <strong>✅ 회원가입 불필요:</strong> 서비스 이용을 위한 회원가입이나 로그인이 필요하지 않습니다.<br/>
+                    <strong>✅ 사진 즉시 삭제:</strong> 업로드한 사진은 AI 분석 처리 중에만 메모리에 임시 존재하며, 분석 완료 즉시 자동으로 완전 삭제됩니다.<br/>
+                    <strong>✅ 데이터베이스 미저장:</strong> 어떠한 개인정보나 사진도 서버나 데이터베이스에 저장되지 않습니다.<br/>
+                    <strong>✅ 분석 결과만 제공:</strong> 사용자에게는 AI 분석 결과만 제공되며, 원본 사진은 보관하지 않습니다.
+                  </p>
+                </div>
               </div>
               
               <div>
@@ -145,8 +150,15 @@ export default function AgreePage() {
 
           {/* 최종 동의 */}
           <section className="text-center pt-6 border-t border-gray-200">
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-4">
+              <p className="text-blue-800 text-center font-semibold">
+                🔒 <strong>개인정보 보호 약속</strong><br/>
+                본 서비스는 사용자의 개인정보를 수집하거나 저장하지 않습니다.<br/>
+                업로드한 사진은 AI 분석에만 사용되고 즉시 삭제됩니다.
+              </p>
+            </div>
             <p className="text-gray-600 text-sm mb-4">
-              본 약관은 2025년 8월 1일부터 적용됩니다.<br/>
+              본 약관은 2025년 9월 25일부터 적용됩니다.<br/>
               서비스 이용 시 위 약관에 동의한 것으로 간주됩니다.
             </p>
             

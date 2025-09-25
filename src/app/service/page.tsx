@@ -77,7 +77,7 @@ export default function ServicePage() {
                   <div className="text-2xl mr-3">🧠</div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800">MBTI × 관상 분석</h3>
-                    <p className="text-sm text-gray-600">2,900원</p>
+                    <p className="text-sm text-gray-600">3,900원</p>
                   </div>
                 </div>
                 <p className="text-gray-700 text-sm leading-relaxed">
@@ -90,7 +90,7 @@ export default function ServicePage() {
                   <div className="text-2xl mr-3">👁️</div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800">정통 관상 분석</h3>
-                    <p className="text-sm text-gray-600">4,900원</p>
+                    <p className="text-sm text-gray-600">9,900원</p>
                   </div>
                 </div>
                 <p className="text-gray-700 text-sm leading-relaxed">
@@ -103,7 +103,7 @@ export default function ServicePage() {
                   <div className="text-2xl mr-3">🔮</div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800">관상 + 사주 분석</h3>
-                    <p className="text-sm text-gray-600">9,900원</p>
+                    <p className="text-sm text-gray-600">19,900원</p>
                   </div>
                 </div>
                 <p className="text-gray-700 text-sm leading-relaxed">
@@ -158,7 +158,8 @@ export default function ServicePage() {
               <div className="space-y-2 text-amber-700 text-sm">
                 <p>• 본 서비스는 <strong>엔터테인먼트 목적</strong>으로 제공되며, 과학적 근거를 바탕으로 하지 않습니다.</p>
                 <p>• 분석 결과는 <strong>재미를 위한 콘텐츠</strong>이며, 실제 성격이나 운세와 다를 수 있습니다.</p>
-                <p>• 업로드된 사진과 개인정보는 <strong>분석 완료 즉시 삭제</strong>됩니다.</p>
+                <p className="text-red-800">• <strong>개인정보 보호: 업로드한 사진은 AI 분석 처리 중에만 메모리에 임시로 존재하며, 분석 완료 즉시 자동으로 완전 삭제됩니다. 서버나 데이터베이스에 저장되지 않습니다.</strong></p>
+                <p className="text-red-800">• <strong>회원가입 불필요: 별도의 회원가입 절차 없이 서비스를 이용할 수 있으며, 어떠한 개인정보도 수집하거나 저장하지 않습니다.</strong></p>
                 <p>• 디지털 콘텐츠 특성상 <strong>결제 후 환불이 제한</strong>될 수 있습니다.</p>
               </div>
             </div>

@@ -859,11 +859,11 @@ function GwansangPageContent({ initialView }: GwansangPageContentProps) {
           <>
             <header style={{
               textAlign: 'center',
-              padding: '20px 16px 10px'
+              padding: '10px 16px 5px'
             }}>
               <h1 style={{
                 fontSize: 'clamp(1.8rem, 5vw, 2.5rem)',
-                marginBottom: '8px',
+                marginBottom: '4px',
                 color: '#5e2b97',
                 textAlign: 'center',
                 fontWeight: 'bold',
@@ -873,7 +873,7 @@ function GwansangPageContent({ initialView }: GwansangPageContentProps) {
                 fontSize: 'clamp(0.9rem, 3vw, 1.1rem)',
                 color: '#666',
                 textAlign: 'center',
-                marginBottom: '10px',
+                marginBottom: '5px',
                 lineHeight: '1.4',
                 padding: '0 16px'
               }}>AI가 알려주는 나의 얼굴 속<br className="mobile-break" /> 성향, 운명, 그리고 궁합까지</p>
@@ -883,7 +883,7 @@ function GwansangPageContent({ initialView }: GwansangPageContentProps) {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              marginTop: '20px',
+              marginTop: '10px',
               gap: '16px',
               padding: '0 16px',
               paddingBottom: '40px'

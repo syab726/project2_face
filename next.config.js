@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  swcMinify: false,
   images: {
     unoptimized: true,
   },
@@ -10,21 +11,34 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // HMR 완전 비활성화
+  experimental: {
+    forceSwcTransforms: false,
+  },
+
   webpack: (config, { dev, isServer }) => {
-    if (dev && !isServer) {
-      config.watchOptions = {
-        poll: false,
-        ignored: /node_modules/
+    // face-api.js를 위한 폴리필 설정
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        os: false,
+        encoding: false,
       };
     }
+
+    // 개발 모드 최적화
+    if (dev) {
+      config.watchOptions = {
+        poll: false,
+        aggregateTimeout: 300,
+        ignored: ['**/node_modules/**'],
+      };
+    }
+
     return config;
   },
-  // 실험적 기능 설정
-  experimental: {
-    // Fast Refresh 안정화
-    esmExternals: false
-  },
+
   // 한글 URL을 영문 폴더로 매핑 (SEO 유지)
   async rewrites() {
     return [

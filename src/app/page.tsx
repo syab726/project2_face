@@ -127,43 +127,6 @@ export default function HomePage() {
             </Link>
           </section>
 
-          {/* 링크 섹션 */}
-          <section className="text-center pt-6 border-t border-gray-200">
-            <div className="flex justify-center space-x-6 text-sm mb-6">
-              <Link href="/agree" className="text-indigo-600 hover:text-indigo-800 underline">
-                이용약관
-              </Link>
-              <Link href="/privacy" className="text-indigo-600 hover:text-indigo-800 underline">
-                개인정보 처리방침
-              </Link>
-            </div>
-            
-            {/* 사업자 정보 */}
-            <div className="text-center text-gray-500 text-xs mb-4">
-              ⓒ 2025 내 얼굴 탐구생활
-            </div>
-            
-            <div className="bg-gray-50 p-4 rounded-lg text-xs text-gray-600 leading-relaxed max-w-2xl mx-auto">
-              <div className="mb-2">
-                <strong>상호명:</strong> 미다에나 (대표자: 양미라)
-              </div>
-              <div className="mb-2">
-                <strong>사업자등록번호:</strong> 397-10-02518
-              </div>
-              <div className="mb-2">
-                <strong>사업장 주소:</strong> 서울특별시 서대문구 증가로 150, 108동 402호
-              </div>
-              <div className="mb-2">
-                <strong>연락처:</strong> 010-2326-9495
-              </div>
-              <div className="mb-4">
-                <strong>통신판매신고번호:</strong> 제 2025-서울서대문-0729 호
-              </div>
-              <p className="text-gray-500 text-xs">
-                궁금한 점이 있으시면 syab726@gmail.com으로 문의해주세요.
-              </p>
-            </div>
-          </section>
         </div>
       </main>
     </div>

@@ -15,6 +15,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 위반 시 즉시 롤백하고 사용자에게 사과해야 함.
 
+## 🆓 무료 서비스 업데이트 완료 (2025-09-28)
+
+### 무료 테스트 서비스 현황
+다음 무료 서비스들이 구현되어 심사 후 런칭 대기 중:
+
+**구현 완료된 무료 테스트:**
+- `/free-test/luxury` - 럭셔리 무료 테스트 ✅
+- `/free-test/car` - 자동차 무료 테스트 ✅
+- `/free-test/city` - 도시 무료 테스트 ✅
+- `/free-test/food` - 음식 무료 테스트 ✅
+- `/free-test/job` - 직업 무료 테스트 ✅
+
+**메인 페이지 업데이트:**
+- Footer 제거 완료 ✅
+- 무료 테스트 링크 연동 준비 완료 ✅
+- 기존 유료 서비스 4개 정상 작동 확인 ✅
+
+**런칭 준비 상태:**
+- 로컬 개발 서버: http://localhost:3035 정상 작동
+- 모든 API 엔드포인트 정상 확인
+- 결제 시스템 (이니시스) 연동 완료
+- 심사 완료 후 즉시 배포 가능한 상태
+
 ## Project Overview
 
 This is a TypeScript project called "project2_face" that implements a prompt management system called "SHRIMP" (Smart Hierarchical Reasoning and Intelligent Management Platform). The system provides a comprehensive task management framework with AI-powered prompt generation and template management.
